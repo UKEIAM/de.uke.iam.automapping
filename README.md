@@ -1,0 +1,1 @@
+# de.uke.iam.automapping
