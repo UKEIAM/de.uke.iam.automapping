@@ -1,1 +1,0 @@
-THis folder contains the proper, object-orientated code for the actual pipeline.
