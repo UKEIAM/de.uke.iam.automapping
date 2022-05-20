@@ -1,7 +1,8 @@
+setuptools
 numpy
 scipy
 pandas
-spacy
 matplotlib
 seaborn
+transformers
 ipykernel
