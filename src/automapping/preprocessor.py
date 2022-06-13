@@ -71,20 +71,6 @@ class EntityExtractor(Preprocessor):
 
 
 
-            # Do something with sample here
-            #raise NotImplementedError()
-            #yield sample
 
-
-#x=Abbreviations(mapping data)
-#x(loader)
-#abb=Abbreviations.list_of_abbreviations('/workspaces/de.uke.iam.automapping/experiments/german_abbreviation.xlsx', 'Abbreviation', 'Description')
-#print(abb)
-#a=Abbreviations(abb)
-#print(a(ExcelLoader('/workspaces/de.uke.iam.automapping/experiments/VM_Soarian_HCHS_20210422.xlsx', 'Langname', 'de')))
-#a=Abbreviations(mapping=abb)
-#print(list(a(ExcelLoader('/workspaces/de.uke.iam.automapping/experiments/VM_Soarian_HCHS_20210422.xlsx', 'Langname', 'de'))))
-
-#print(list(ExcelLoader('/workspaces/de.uke.iam.automapping/experiments/VM_Soarian_HCHS_20210422.xlsx', 'Langname', 'de')
 
 

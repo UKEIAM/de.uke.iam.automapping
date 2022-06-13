@@ -38,12 +38,3 @@ class HuggingFace(Translator):
         for sample in translator(samples):
             tr_list.append(sample.get('translation_text'))
         return tr_list
-
-
-
-#model=HuggingFace("en")
-#data=ExcelLoader('/workspaces/de.uke.iam.automapping/experiments/VM_Soarian_HCHS_20210422.xlsx', 'Langname', 'de')
-#abbreviations=Abbreviations.list_of_abbreviations('/workspaces/de.uke.iam.automapping/experiments/german_abbreviation.xlsx', 'Abbreviation', 'Description')
-#print(model.translate(data, Abbreviations(abbreviations)))
-
-#print(list(HuggingFace()))
