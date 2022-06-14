@@ -10,7 +10,7 @@ class Preprocessor:
     A step in the pipeline preprocessing the raw input.
     """
 
-    def __call__(self, data: Iterable[str]) -> Iterable[str]:#подставить результаты из loader 
+    def __call__(self, data: Iterable[str]) -> Iterable[str]:
 
         raise NotImplementedError(
             "Abstract method required to be overwritten in subclass"
@@ -24,24 +24,22 @@ class Abbreviations(Preprocessor):
     """
 
     def __init__(self, mapping: Mapping[str, str]):
-        # You can add a static method for reading the mapping from e.g. a Excel file.
         self.mapping = mapping
 
 
     @staticmethod
-    def list_of_abbreviations(path, name_of_abbreviation_column, name_of_description_column):
+    def load_list_of_abbreviations(path:str, name_of_abbreviation_column:str, name_of_description_column:str):
         """
         Reading the mapping from Excel file with abbreviations.
         """
-        df=pd.read_excel(path)
-        df=df[[name_of_abbreviation_column, name_of_description_column]]
-        return df
+        abbreviations=pd.read_excel(path)
+        return abbreviations[[name_of_abbreviation_column, name_of_description_column]]
 
 
     def __call__(self, data: Iterable[str]) -> Iterable[str]:
         for sample in data:
-            for raw_tuple in self.mapping.itertuples():
-                sample = re.sub(r'\b' + raw_tuple[1] + r'[^\w]', raw_tuple[2] + ' ', sample)
+            for _, original, replacement in self.mapping.itertuples():
+                sample = re.sub(r'\b' + original + r'[^\w]', replacement + ' ', sample)
             yield sample
 
 
@@ -50,19 +48,23 @@ class EntityExtractor(Preprocessor):
     """
     A step in the pipeline removing uneccessary word.
     """
+
+    def __init__(self):
+        self.nlp=spacy.load('en_core_web_lg')
+        self.nlp.Defaults.stop_words.remove('no')
+        self.nlp.Defaults.stop_words.remove('not')
+        self.nlp.Defaults.stop_words.remove('none')
+        self.nlp.Defaults.stop_words.remove('noone')
+        self.nlp.Defaults.stop_words.remove('back')
+        self.nlp.Defaults.stop_words.add('doctor')
+
+
     def __call__(self, data: Iterable[str]) -> Iterable[str]:
         ready_list=[]
-        nlp=spacy.load('en_core_web_lg')
-        nlp.Defaults.stop_words.remove('no')
-        nlp.Defaults.stop_words.remove('not')
-        nlp.Defaults.stop_words.remove('none')
-        nlp.Defaults.stop_words.remove('noone')
-        nlp.Defaults.stop_words.remove('back')
-        nlp.Defaults.stop_words.add('doctor')
         for sample in data:
             sample=sample.lower()
             token_list=[]
-            doc=nlp(sample)
+            doc=self.nlp(sample)
             token_list=[token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
             text = " ".join(token_list)
             ready_list.append(text)
