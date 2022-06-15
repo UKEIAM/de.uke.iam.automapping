@@ -1,5 +1,5 @@
 from transformers import pipeline
-from typing import Sequence 
+from typing import Sequence
 from . import Loader
 from . import Language
 from . import Preprocessor
