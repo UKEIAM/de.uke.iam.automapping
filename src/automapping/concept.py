@@ -11,5 +11,3 @@ class Concept:
 
     concept_id: int
     names: Sequence[str]
-        
-

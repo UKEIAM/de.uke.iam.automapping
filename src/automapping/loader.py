@@ -8,7 +8,6 @@ class Loader:
     """
     A class loading samples from a source.
     """
-
     def __init__(self, language: Language):
         self.language = language
 
