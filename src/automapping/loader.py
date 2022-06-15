@@ -1,7 +1,7 @@
 from typing import Iterable
 import pandas as pd
 import numpy as np
-from . import Language
+from .language import Language
 
 
 class Loader:

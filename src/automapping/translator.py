@@ -1,8 +1,8 @@
 from transformers import pipeline
 from typing import Sequence
-from . import Loader
-from . import Language
-from . import Preprocessor
+from .loader import Loader
+from .language import Language
+from .preprocessor import Preprocessor
 
 
 class Translator:
@@ -17,6 +17,9 @@ class Translator:
     def translate(
         self, data: Loader, preprocessor: Sequence[Preprocessor]
     ) -> Sequence[str]:
+        """
+        Translation step
+        """
         raise NotImplementedError(
             "Abstract method required to be overwritten in subclass"
         )

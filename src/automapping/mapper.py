@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Sequence
 
-from . import Concept
+from .concept import Concept
 
 
 @dataclass
