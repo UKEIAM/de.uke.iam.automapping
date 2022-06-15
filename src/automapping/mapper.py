@@ -39,8 +39,3 @@ class TfIdf(Mapper):
 
     def __call__(self, data: str, num_guesses: int) -> Sequence[Prediction]:
         raise NotImplementedError()
-
-
-
-
-
