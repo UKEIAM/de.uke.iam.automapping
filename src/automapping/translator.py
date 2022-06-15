@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from transformers import pipeline
 from typing import Sequence
 from .loader import Loader
@@ -10,10 +11,7 @@ class Translator:
     A step in the pipeline doing the actual translation.
     """
 
-    def __init__(self, source_language: Language, target_language: Language):
-        self.target_language = target_language
-        self.source_language = source_language
-
+    @abstractmethod
     def translate(
         self, data: Loader, preprocessor: Sequence[Preprocessor]
     ) -> Sequence[str]:
