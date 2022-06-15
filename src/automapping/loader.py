@@ -1,7 +1,7 @@
 from typing import Iterable
 import pandas as pd
 import numpy as np
-from language import Language
+from . import Language
 
 
 class Loader:
@@ -29,7 +29,6 @@ class ExcelLoader(Loader):
         self.column=column
         self.data=pd.read_excel(self.path, usecols=[self.column])
         
-
     def __iter__(self) -> Iterable[str]:
         self.data=self.data.replace([' ', ''], np.nan)
         self.data[self.column]=self.data[self.column].str.strip()
