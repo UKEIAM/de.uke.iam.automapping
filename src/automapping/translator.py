@@ -29,10 +29,9 @@ class HuggingFace(Translator):
 
     """
     def __init__(self, source_language: Language,  target_language: Language):
-
         self.target_language = target_language
         self.source_language = source_language
-        self.model="Helsinki-NLP/opus-mt-" + self.target_language.value + "-" +self.source_language.value
+        self.model=f"Helsinki-NLP/opus-mt-{self.target_language.value}-{self.source_language.value}"
 
 
     def translate(self, data: Loader, preprocessor: Sequence[Preprocessor]) -> Sequence[str]:
