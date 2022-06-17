@@ -9,3 +9,4 @@ ipykernel
 scikit-learn
 tqdm
 spacy
+openpyxl
