@@ -25,14 +25,16 @@ class Abbreviations(Preprocessor):
         self.mapping = mapping
 
     @staticmethod
-    def load_list_of_abbreviations(
+    def load_abbreviations(
         path: str, name_of_abbreviation_column: str, name_of_description_column: str
-    ):
+    ) -> Preprocessor:
         """
         Reading the mapping from Excel file with abbreviations.
         """
         abbreviations = pd.read_excel(path)
-        return abbreviations[[name_of_abbreviation_column, name_of_description_column]]
+        return Abbreviations(
+            abbreviations[[name_of_abbreviation_column, name_of_description_column]]
+        )
 
     def __call__(self, data: Iterable[str]) -> Iterable[str]:
         for sample in data:
