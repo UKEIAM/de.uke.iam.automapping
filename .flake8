@@ -7,5 +7,6 @@ exclude =
     docs/source/conf.py,
     old,
     build,
-    dist
+    dist,
+    experiments
 max-complexity = 10
