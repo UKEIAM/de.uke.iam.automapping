@@ -12,3 +12,4 @@ spacy
 openpyxl
 heapq
 fsspec
+torch
