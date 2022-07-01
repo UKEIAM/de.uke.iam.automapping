@@ -14,3 +14,4 @@ heapq
 fsspec
 torch
 sentencepiece
+sacremoses
