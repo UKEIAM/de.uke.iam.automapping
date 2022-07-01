@@ -13,10 +13,10 @@ class Prediction:
     A prediction with associated confidence score.
     """
 
-    term: str
-    predicted_id: int
-    predicted_name: str
-    confidence: float
+    source_names: str
+    concept_ids: int
+    concept_names: str
+    confidence_scores: float
 
 
 class Mapper:
@@ -46,25 +46,25 @@ class TfIdf(Mapper):
         matrix_with_similarity_score = (
             self.create_matrix_with_cosine_sim_between_term_concept(data)
         )
-        terms = []
+        source_names = []
         concept_ids = []
         concept_names = []
-        sim_score = []
+        confidence_score = []
         for i in range(matrix_with_similarity_score.shape[0]):
             for seq_number, score in heapq.nlargest(
                 num_guesses,
                 enumerate(matrix_with_similarity_score[i]),
                 key=lambda x: x[1],
             ):
-                terms.append(data[i])
+                source_names.append(data[i])
                 concept_ids.append(self.concepts.concept_id[seq_number])
                 concept_names.append(self.concepts.names[seq_number])
-                sim_score.append(score)
+                confidence_score.append(score)
         return Prediction(
-            terms,
+            source_names,
             concept_ids,
             concept_names,
-            sim_score,
+            confidence_score,
         )
 
     def create_matrix_with_cosine_sim_between_term_concept(self, data: str) -> matrix:
@@ -73,5 +73,5 @@ class TfIdf(Mapper):
         """
         tfidf = TfidfVectorizer()
         concepts_tfidf = tfidf.fit_transform(self.concepts.names)
-        terms_tfidf = tfidf.transform(data)
-        return cosine_similarity(terms_tfidf, concepts_tfidf)
+        source_tfidf = tfidf.transform(data)
+        return cosine_similarity(source_tfidf, concepts_tfidf)
