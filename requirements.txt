@@ -11,3 +11,4 @@ tqdm
 spacy
 openpyxl
 heapq
+fsspec
