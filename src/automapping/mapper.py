@@ -69,7 +69,7 @@ class TfIdf(Mapper):
 
     def create_matrix_with_cosine_sim_between_term_concept(self, data: str) -> matrix:
         """
-        Make a correlation matrix between the two documents.
+        Method for creating a matrix with cosine similarity between term and concept.
         """
         tfidf = TfidfVectorizer()
         concepts_tfidf = tfidf.fit_transform(self.concepts.names)
