@@ -13,3 +13,4 @@ openpyxl
 heapq
 fsspec
 torch
+sentencepiece
