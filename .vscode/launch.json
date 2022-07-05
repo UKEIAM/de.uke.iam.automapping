@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Part of module",
+            "type": "python",
+            "request": "launch",
+            // Just change this to the part of the package you want to debug
+            "module": "automapping.loader",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
+        }
+    ]
+}
