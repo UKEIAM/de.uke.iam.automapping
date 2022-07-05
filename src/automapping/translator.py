@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from transformers import pipeline
 from typing import Sequence
-from loader import Loader
-from language import Language
-from preprocessor import Preprocessor
+from .loader import Loader
+from .language import Language
+from .preprocessor import Preprocessor
 
 
 class Translator:
