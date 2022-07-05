@@ -5,12 +5,10 @@ pandas
 matplotlib
 seaborn
 transformers
-ipykernel
 scikit-learn
 tqdm
 spacy
 openpyxl
-heapq
 fsspec
 torch
 sentencepiece
