@@ -1,22 +1,11 @@
-from dataclasses import dataclass
 from typing import Sequence
 from numpy import matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import heapq
 from .concept import Concept
-
-
-@dataclass
-class Prediction:
-    """
-    A prediction with associated confidence score.
-    """
-
-    source_name: str
-    concept_id: int
-    concept_name: str
-    confidence_score: float
+from .detections import Predictions
+from .prediction import Prediction
 
 
 class Mapper:
@@ -24,7 +13,7 @@ class Mapper:
     The final step in the pipeline mapping text input to existing concepts.
     """
 
-    def __call__(self, data: str, num_guesses: int) -> Sequence[Prediction]:
+    def __call__(self, data: str, num_guesses: int) -> Predictions:
         """
         Map a given input to the top guesses sorted in descending order.
         """
@@ -44,7 +33,7 @@ class TfIdf(Mapper):
         self.tfidf = TfidfVectorizer()
         self.concepts_tfidf = self.tfidf.fit_transform(self.concepts.names)
 
-    def __call__(self, data: str, num_guesses: int) -> Sequence[Prediction]:
+    def __call__(self, data: str, num_guesses: int) -> Predictions:
         matrix_with_similarity_score = (
             self._create_matrix_with_cosine_sim_between_term_concept(data)
         )
