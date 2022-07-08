@@ -1,4 +1,4 @@
-from .mapper import Prediction
+from .prediction import Prediction
 import pandas as pd
 
 
