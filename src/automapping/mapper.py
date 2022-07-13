@@ -33,7 +33,7 @@ class TfIdf(Mapper):
         self.tfidf = TfidfVectorizer()
         self.concepts_tfidf = self.tfidf.fit_transform(self.concepts.names)
 
-    def __call__(self, data: str, num_guesses: int) -> Predictions:
+    def __call__(self, data: str, num_guesses: int) -> Sequence[Prediction]:
         matrix_with_similarity_score = (
             self._create_matrix_with_cosine_sim_between_term_concept(data)
         )
