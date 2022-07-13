@@ -58,7 +58,6 @@ class EntityExtractor(Preprocessor):
         self.nlp.Defaults.stop_words.add("doctor")
 
     def __call__(self, data: Iterable[str]) -> Iterable[str]:
-        ready_list = []
         for sample in data:
             sample = sample.lower()
             token_list = []
@@ -69,5 +68,4 @@ class EntityExtractor(Preprocessor):
                 if not token.is_stop and not token.is_punct
             ]
             text = " ".join(token_list)
-            ready_list.append(text)
-        return iter(ready_list)
+            yield text
