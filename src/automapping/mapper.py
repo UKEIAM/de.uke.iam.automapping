@@ -33,22 +33,26 @@ class TfIdf(Mapper):
         self.tfidf = TfidfVectorizer()
         self.concepts_tfidf = self.tfidf.fit_transform(self.concepts.names)
 
-    def __call__(self, data: str, num_guesses: int) -> Sequence[Prediction]:
+    def __call__(self, data: str, num_guesses: int) -> Predictions:
         matrix_with_similarity_score = (
             self._create_matrix_with_cosine_sim_between_term_concept(data)
         )
+        predictions_list = []
         for i in range(matrix_with_similarity_score.shape[0]):
             for seq_number, score in heapq.nlargest(
                 num_guesses,
                 enumerate(matrix_with_similarity_score[i]),
                 key=lambda x: x[1],
             ):
-                yield Prediction(
-                    data[i],
-                    self.concepts.concept_id[seq_number],
-                    self.concepts.names[seq_number],
-                    score,
+                predictions_list.append(
+                    Prediction(
+                        data[i],
+                        self.concepts.concept_id[seq_number],
+                        self.concepts.names[seq_number],
+                        score,
+                    )
                 )
+        return Predictions(predictions_list)
 
     def _create_matrix_with_cosine_sim_between_term_concept(self, data: str) -> matrix:
         """
