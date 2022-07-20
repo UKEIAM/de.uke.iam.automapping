@@ -4,22 +4,26 @@
 	"name": "Python 3",
 	"build": {
 		"dockerfile": "Dockerfile",
-		"context": ".."
+		"context": "..",
+		"args": {
+			"PYTORCH_VERSION": "22.06-py3",
+			"SPACY_PIPELINE": "en_core_web_lg"
+		}
 	},
 	"settings": {
-		"python.defaultInterpreterPath": "/usr/local/bin/python",
+		"python.defaultInterpreterPath": "/opt/conda/bin/python",
 		"python.analysis.typeCheckingMode": "basic",
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
-		"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
+		"python.linting.flake8Enabled": true,
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black",
+		"python.formatting.blackPath": "/opt/conda/bin/black",
+		"python.linting.flake8Path": "/opt/conda/bin/flake8",
+		"python.linting.pylintPath": "/opt/conda/bin/pylint",
 		"python.linting.pylintArgs": [
 			"--enable=F,E,W"
-		],
-		"python.linting.flake8Enabled": true,
-		"python.linting.flake8Path": "/usr/local/py-utils/bin/flake8",
-		"python.formatting.provider": "black",
-		"editor.formatOnSave": true,
-		"python.formatting.blackPath": "/usr/local/py-utils/bin/black"
+		]
 	},
 	"extensions": [
 		"ms-python.python",
