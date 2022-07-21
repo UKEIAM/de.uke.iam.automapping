@@ -49,6 +49,7 @@ class EntityExtractor(Preprocessor):
     """
 
     def __init__(self):
+        # We preinstalled this in the Docker enviornment. If run as a package, it will be downloaded.
         self.nlp = spacy.load("en_core_web_lg")
         self.nlp.Defaults.stop_words.remove("no")
         self.nlp.Defaults.stop_words.remove("not")

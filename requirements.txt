@@ -10,6 +10,5 @@ tqdm
 spacy
 openpyxl
 fsspec
-torch
 sentencepiece
 sacremoses
