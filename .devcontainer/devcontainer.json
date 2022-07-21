@@ -6,7 +6,6 @@
 		"dockerfile": "Dockerfile",
 		"context": "..",
 		"args": {
-			"PYTORCH_VERSION": "22.06-py3",
 			"SPACY_PIPELINE": "en_core_web_lg"
 		}
 	},

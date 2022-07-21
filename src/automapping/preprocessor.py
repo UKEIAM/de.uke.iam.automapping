@@ -1,7 +1,7 @@
 from typing import Iterable, Mapping
 import re
 import pandas as pd
-import spacy
+import en_core_web_lg
 
 
 class Preprocessor:
@@ -49,7 +49,7 @@ class EntityExtractor(Preprocessor):
     """
 
     def __init__(self):
-        self.nlp = spacy.load("en_core_web_lg")
+        self.nlp = en_core_web_lg.load()
         self.nlp.Defaults.stop_words.remove("no")
         self.nlp.Defaults.stop_words.remove("not")
         self.nlp.Defaults.stop_words.remove("none")
