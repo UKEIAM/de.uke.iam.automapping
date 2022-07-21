@@ -1,7 +1,7 @@
 from typing import Iterable, Mapping
 import re
 import pandas as pd
-import en_core_web_lg
+import spacy
 
 
 class Preprocessor:
@@ -49,7 +49,8 @@ class EntityExtractor(Preprocessor):
     """
 
     def __init__(self):
-        self.nlp = en_core_web_lg.load()
+        # We preinstalled this in the Docker enviornment. If run as a package, it will be downloaded.
+        self.nlp = spacy.load("en_core_web_lg")
         self.nlp.Defaults.stop_words.remove("no")
         self.nlp.Defaults.stop_words.remove("not")
         self.nlp.Defaults.stop_words.remove("none")
