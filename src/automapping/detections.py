@@ -30,6 +30,7 @@ class Predictions:
             "SourceName",
             "ConceptName",
             "ConceptID",
+            "DomainID",
             "MatchScore",
         ]
         return df_with_results
