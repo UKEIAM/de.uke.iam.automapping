@@ -42,7 +42,7 @@ class TfIdf(Mapper):
             for seq_number, score in heapq.nlargest(
                 num_guesses,
                 enumerate(matrix_with_similarity_score[i]),
-                key=lambda x: x[2 - 1],
+                key=lambda x: x[1],
             ):
                 predictions_list.append(
                     Prediction(
