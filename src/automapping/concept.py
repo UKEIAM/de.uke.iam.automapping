@@ -10,4 +10,4 @@ class Concept:
 
     concept_id: int
     names: Sequence[str]
-    domain_id: int
+    domain_id: str
