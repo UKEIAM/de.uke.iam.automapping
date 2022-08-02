@@ -28,8 +28,8 @@ class Predictions:
         df_with_results = pd.DataFrame.from_dict(list(self._detections))
         df_with_results.columns = [
             "SourceName",
-            "ConceptName",
             "ConceptID",
+            "ConceptName",
             "DomainID",
             "MatchScore",
         ]
