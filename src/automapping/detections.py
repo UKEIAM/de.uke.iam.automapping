@@ -27,7 +27,7 @@ class Predictions:
     def __setitem__(self, key: int, value: Prediction):
         self._detections[key] = value
 
-    def _filtering_duplictes(self):
+    def _filtering_dublicates(self):
         """
         Method to get unique ConceptID for each SourceName
         """
