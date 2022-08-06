@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Sequence
+
 import pandas as pd
 
 
@@ -36,7 +37,8 @@ class Concept:
         main_concept_names = list(map(str, concepts["concept_name"]))
         synonyms = pd.read_csv(
             path_synonyms, on_bad_lines="skip", delimiter="\t", low_memory=False
-        )  # no filter for standart/not standart
+        )
+        synonyms = synonyms[synonyms["concept_id"].isin(main_concept_ids)]
         synonyms_concept_ids = synonyms["concept_id"].tolist()
         synonyms_domain_ids = ["Synonym"] * synonyms.shape[0]
         synonyms_concept_names = list(
