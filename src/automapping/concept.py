@@ -16,7 +16,7 @@ class Concept:
 
     @staticmethod
     def concatenate_concept_with_their_synonyms(
-        path_concepts: str, path_synonyms: str, vocabulary_id: str
+        path_concepts: str, path_synonyms: str, vocabulary_ids: Sequence[str]
     ) -> "Concept":
         """
         Method for concatenation concepts and their synonyms
@@ -26,7 +26,7 @@ class Concept:
             path_concepts, on_bad_lines="skip", delimiter="\t", low_memory=False
         )
         concepts = concepts[
-            (concepts["vocabulary_id"] == vocabulary_id)
+            (concepts["vocabulary_id"].isin(vocabulary_ids))
             & (concepts["standard_concept"] == "S")
         ]
         concepts["concept_name"] = (
