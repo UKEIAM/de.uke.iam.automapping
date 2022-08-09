@@ -34,13 +34,13 @@ class Predictions:
         df_with_results = pd.DataFrame.from_dict(list(self._detections))
         df_with_results.columns = [
             "SourceName",
-            "ConceptID",
-            "ConceptName",
-            "DomainID",
+            "targetConceptName",
+            "targetConceptID",
+            "targetDomainID",
             "MatchScore",
         ]
         df_with_results = df_with_results.drop_duplicates(
-            subset=["SourceName", "ConceptID"], keep="first"
+            subset=["SourceName", "targetConceptID"], keep="first"
         ).reset_index(drop=True)
         return df_with_results
 
@@ -51,6 +51,14 @@ class Predictions:
         df_with_final_results = (
             self.df_with_results.groupby("SourceName")
             .head(num_guesses)
+            .reset_index(drop=True)
+        )
+        df_with_final_results = df_with_final_results.sort_values(
+            "SourceName"
+        ).reset_index(drop=True)
+        df_with_final_results = (
+            df_with_final_results.groupby(["SourceName"])
+            .apply(lambda x: x.sort_values(["MatchScore"], ascending=False))
             .reset_index(drop=True)
         )
         return df_with_final_results
