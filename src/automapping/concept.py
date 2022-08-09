@@ -10,8 +10,8 @@ class Concept:
     A concept in a medical ontology like SNOMED-CT.
     """
 
-    concept_id: int
     names: Sequence[str]
+    concept_id: int
     domain_ids: Sequence[str]
 
     @staticmethod
@@ -45,7 +45,7 @@ class Concept:
             map(str, synonyms["concept_synonym_name"].str.lower())
         )
         return Concept(
-            main_concept_ids + synonyms_concept_ids,
             main_concept_names + synonyms_concept_names,
+            main_concept_ids + synonyms_concept_ids,
             main_domain_ids + synonyms_domain_ids,
         )
