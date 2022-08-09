@@ -49,15 +49,15 @@ class TfIdf(Mapper):
                 predictions_list.append(
                     Prediction(
                         data[i],
-                        self.concepts.concept_id[seq_number],
                         self.concepts.names[seq_number],
+                        self.concepts.concept_id[seq_number],
                         self.concepts.domain_ids[seq_number],
                         score,
                     )
                 )
         return Predictions(predictions_list)
 
-    def _create_matrix_with_cosine_sim_between_term_concept(self, data: str) -> matrix:
+    def _create_matrix_with_cosine_sim_between_term_concept(self, data: list) -> matrix:
         """
         Method for creating a matrix with cosine similarity between term and concept.
         """
