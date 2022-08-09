@@ -8,7 +8,7 @@ class Prediction:
     """
 
     source_name: str
-    concept_id: int
     concept_name: str
+    concept_id: int
     domain_id: str
     confidence_score: float
