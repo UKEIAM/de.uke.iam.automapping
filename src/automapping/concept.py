@@ -17,11 +17,10 @@ class Concept:
     @staticmethod
     def concatenate_concept_with_their_synonyms(
         path_concepts: str, path_synonyms: str, vocabulary_ids: Sequence[str]
-    ) -> "Concept":
+    ) -> pd.DataFrame:
         """
         Method for concatenation concepts and their synonyms
         """
-
         concepts = pd.read_csv(
             path_concepts, on_bad_lines="skip", delimiter="\t", low_memory=False
         )
@@ -44,8 +43,11 @@ class Concept:
         synonyms_concept_names = list(
             map(str, synonyms["concept_synonym_name"].str.lower())
         )
-        return Concept(
-            main_concept_names + synonyms_concept_names,
-            main_concept_ids + synonyms_concept_ids,
-            main_domain_ids + synonyms_domain_ids,
+        df_with_concepts = pd.DataFrame(
+            {
+                "ConceptName": main_concept_names + synonyms_concept_names,
+                "ConceptID": main_concept_ids + synonyms_concept_ids,
+                "DomainID": main_domain_ids + synonyms_domain_ids,
+            }
         )
+        return df_with_concepts
