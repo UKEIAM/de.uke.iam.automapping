@@ -1,7 +1,9 @@
-from dataclasses import dataclass
-from .prediction import Prediction
+from dataclasses import dataclass, field
 from typing import Sequence
+
 import pandas as pd
+
+from .prediction import Prediction
 
 
 @dataclass
@@ -11,6 +13,10 @@ class Predictions:
     """
 
     _detections: Sequence[Prediction]
+    df_with_results: pd.DataFrame = field(init=False)
+
+    def __post_init__(self):
+        self.df_with_results = self._filtering_dublicates()
 
     def __len__(self):
         return len(self._detections)
@@ -21,16 +27,38 @@ class Predictions:
     def __setitem__(self, key: int, value: Prediction):
         self._detections[key] = value
 
-    def to_df(self) -> pd.DataFrame:
+    def _filtering_dublicates(self):
         """
-        Get a dataframe with the predictions.
+        Method to get unique ConceptID for each SourceName
         """
         df_with_results = pd.DataFrame.from_dict(list(self._detections))
         df_with_results.columns = [
             "SourceName",
-            "ConceptName",
-            "ConceptID",
-            "DomainID",
+            "targetConceptName",
+            "targetConceptID",
+            "targetDomainID",
             "MatchScore",
         ]
+        df_with_results = df_with_results.drop_duplicates(
+            subset=["SourceName", "targetConceptID"], keep="first"
+        ).reset_index(drop=True)
         return df_with_results
+
+    def to_df(self, num_guesses: int) -> pd.DataFrame:
+        """
+        Get a dataframe with the predictions.
+        """
+        df_with_final_results = (
+            self.df_with_results.groupby("SourceName")
+            .head(num_guesses)
+            .reset_index(drop=True)
+        )
+        df_with_final_results = df_with_final_results.sort_values(
+            "SourceName"
+        ).reset_index(drop=True)
+        df_with_final_results = (
+            df_with_final_results.groupby(["SourceName"])
+            .apply(lambda x: x.sort_values(["MatchScore"], ascending=False))
+            .reset_index(drop=True)
+        )
+        return df_with_final_results

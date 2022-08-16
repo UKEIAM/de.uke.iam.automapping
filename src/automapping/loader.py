@@ -1,6 +1,8 @@
 from typing import Iterable
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+
 from .language import Language
 
 
