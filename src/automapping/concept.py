@@ -16,14 +16,11 @@ class Concept:
 
     @staticmethod
     def concatenate_concept_with_their_synonyms(
-        path_concepts: str, path_synonyms: str, vocabulary_ids: Sequence[str]
-    ) -> pd.DataFrame:
+        concepts: pd.DataFrame, synonyms: pd.DataFrame, vocabulary_ids: Sequence[str]
+    ) -> "Concept":
         """
         Method for concatenation concepts and their synonyms
         """
-        concepts = pd.read_csv(
-            path_concepts, on_bad_lines="skip", delimiter="\t", low_memory=False
-        )
         concepts = concepts[
             (concepts["vocabulary_id"].isin(vocabulary_ids))
             & (concepts["standard_concept"] == "S")
@@ -34,20 +31,14 @@ class Concept:
         main_concept_ids = concepts["concept_id"].tolist()
         main_domain_ids = concepts["domain_id"].tolist()
         main_concept_names = list(map(str, concepts["concept_name"]))
-        synonyms = pd.read_csv(
-            path_synonyms, on_bad_lines="skip", delimiter="\t", low_memory=False
-        )
         synonyms = synonyms[synonyms["concept_id"].isin(main_concept_ids)]
         synonyms_concept_ids = synonyms["concept_id"].tolist()
         synonyms_domain_ids = ["Synonym"] * synonyms.shape[0]
         synonyms_concept_names = list(
             map(str, synonyms["concept_synonym_name"].str.lower())
         )
-        df_with_concepts = pd.DataFrame(
-            {
-                "ConceptName": main_concept_names + synonyms_concept_names,
-                "ConceptID": main_concept_ids + synonyms_concept_ids,
-                "DomainID": main_domain_ids + synonyms_domain_ids,
-            }
+        return Concept(
+            main_concept_names + synonyms_concept_names,
+            main_concept_ids + synonyms_concept_ids,
+            main_domain_ids + synonyms_domain_ids,
         )
-        return df_with_concepts
