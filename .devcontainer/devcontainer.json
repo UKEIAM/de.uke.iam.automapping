@@ -32,5 +32,8 @@
 	"remoteUser": "vscode",
 	"features": {
 		"git": "os-provided"
-	}
+	},
+	"mounts": [
+		"source=/nextcloud/data,target=/iam-data,type=bind,consistency=cached"
+	]
 }
