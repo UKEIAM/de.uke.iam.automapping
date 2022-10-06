@@ -44,9 +44,14 @@ class M5Loader(Loader):
     Load elements from M5
     """
 
-    def __init__(self, url: str, language: Language):
+    def __init__(self, dd: str, version: int, table: str, language: Language):
         super().__init__(language)
-        self.url = url
+        self.dd = dd
+        self.version = version
+        self.table = table
+        self.url = (
+            f"https://mdrdev.fordo.de/m5.rest/api/{self.dd}/{self.version}/{self.table}"
+        )
 
     def __iter__(self) -> Iterable[str]:
         data_json = requests.Session().get(url=self.url).json()
