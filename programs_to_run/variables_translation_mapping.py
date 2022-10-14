@@ -70,8 +70,8 @@ def main():
     parser.add_argument(
         "-voc",
         "--vocabulary_name",
-        type=str,
         nargs="+",
+        type=str,
         help="Vocabulary name(SNOMED..)",
         required=True,
     )
@@ -94,19 +94,20 @@ def main():
     )
     model_entity = EntityExtractor()
     prep_data = model_entity(translated_phrases)
-    synonyms = pd.read_csv(
-        args.path_to_synonym, on_bad_lines="skip", delimiter="\t", low_memory=False
-    )
     concepts = pd.read_csv(
+        args.path_to_concept, on_bad_lines="skip", delimiter="\t", low_memory=False
+    )
+    synonyms = pd.read_csv(
         args.path_to_concept_synonyms,
         on_bad_lines="skip",
         delimiter="\t",
         low_memory=False,
     )
     concepts = Concept.concatenate_concept_with_their_synonyms(
-        concepts, synonyms, [args.vocabulary_name]
+        concepts, synonyms, args.vocabulary_name
     )
     model_mapping = TfIdf(concepts)
+    print(model_mapping(prep_data))
 
     get_the_pred = Predictions(model_mapping(prep_data))
     result = get_the_pred.to_df(args.number_matches)
