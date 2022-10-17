@@ -93,7 +93,7 @@ def main():
         ),
     )
     model_entity = EntityExtractor()
-    prep_data = model_entity(translated_phrases)
+    prep_data = list(model_entity(translated_phrases))
     concepts = pd.read_csv(
         args.path_to_concept, on_bad_lines="skip", delimiter="\t", low_memory=False
     )
@@ -107,8 +107,6 @@ def main():
         concepts, synonyms, args.vocabulary_name
     )
     model_mapping = TfIdf(concepts)
-    print(model_mapping(prep_data))
-
     get_the_pred = Predictions(model_mapping(prep_data))
     result = get_the_pred.to_df(args.number_matches)
     print(result)
