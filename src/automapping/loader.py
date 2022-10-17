@@ -56,4 +56,5 @@ class M5Loader(Loader):
     def __iter__(self) -> Iterable[str]:
         data_json = requests.Session().get(url=self.url).json()
         for element in data_json["elements"]:
-            yield element["labels"][0]["value"]
+            if element["labels"][0]["language"] == self.language.value.upper():
+                yield element["labels"][0]["value"]
