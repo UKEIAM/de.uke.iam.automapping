@@ -2,6 +2,7 @@ from typing import Iterable
 
 import numpy as np
 import pandas as pd
+import requests
 
 from .language import Language
 
@@ -36,3 +37,24 @@ class ExcelLoader(Loader):
         self.data[self.column] = self.data[self.column].str.strip()
         self.data = self.data[self.column].dropna(axis=0)
         return iter(self.data)
+
+
+class M5Loader(Loader):
+    """
+    Load elements from M5
+    """
+
+    def __init__(
+        self, data_dictionary: str, version: int, table: str, language: Language
+    ):
+        super().__init__(language)
+        self.data_dictionary = data_dictionary
+        self.version = version
+        self.table = table
+        self.url = f"https://mdrdev.fordo.de/m5.rest/api/{self.data_dictionary}/{self.version}/{self.table}"
+
+    def __iter__(self) -> Iterable[str]:
+        data_json = requests.Session().get(url=self.url).json()
+        for element in data_json["elements"]:
+            if element["labels"][0]["language"] == self.language.value.upper():
+                yield element["labels"][0]["value"]
