@@ -34,8 +34,8 @@ class M5:
         Upload translated data to M5
         """
         header = {"Content-type": "application/json", "Accept": "application/json"}
-        for i in range(len(names_of_elements)):
-            body = requests.get(self.url + "/" + names_of_elements[i]).json()
+        for i, element in enumerate(names_of_elements):
+            body = requests.get(self.url + "/" + element, timeout=10).json()
             if language.value.upper() not in body["definitions"].keys():
                 body["labels"].append(
                     {
@@ -46,6 +46,6 @@ class M5:
                 )
                 body["definitions"]["EN"] = translated_values[i]
             upd = requests.patch(
-                self.url + "/" + names_of_elements[i], json=body, headers=header
+                self.url + "/" + element, json=body, headers=header, timeout=10
             )
             print(upd)
