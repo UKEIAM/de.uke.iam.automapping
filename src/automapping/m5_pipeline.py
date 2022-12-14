@@ -28,15 +28,18 @@ class M5:
                     yield element["name"], label["value"]
 
     def translation_uploader(
-        self, names_of_elements: list, translated_values: list, target_language: Language
+        self,
+        names_of_elements: list,
+        translated_values: list,
+        target_language: Language,
     ):
         """
         Upload translated data to M5
         """
         header = {"Content-type": "application/json", "Accept": "application/json"}
-        successfull_list_of_elements=[]
+        successfull_list_of_elements = []
         for i, element in enumerate(names_of_elements):
-            full_url="/".join((self.url, element))
+            full_url = "/".join((self.url, element))
             body = requests.get(full_url, timeout=10).json()
             if target_language.value.upper() not in body["definitions"].keys():
                 body["labels"].append(
@@ -46,10 +49,12 @@ class M5:
                         "type": "PREFERED",
                     }
                 )
-                body["definitions"][target_language.value.upper()] = translated_values[i]
-            upd = requests.patch(
-                full_url, json=body, headers=header, timeout=10
-            )
+                body["definitions"][target_language.value.upper()] = translated_values[
+                    i
+                ]
+            upd = requests.patch(full_url, json=body, headers=header, timeout=10)
             if upd.status_code == 200:
-                successfull_list_of_elements.append(element) 
-        print(f'Upload translation for elements {successfull_list_of_elements} completed successfully')
+                successfull_list_of_elements.append(element)
+        print(
+            f"Upload translation for elements {successfull_list_of_elements} completed successfully"
+        )
