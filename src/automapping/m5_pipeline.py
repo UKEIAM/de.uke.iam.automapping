@@ -55,4 +55,4 @@ class M5:
                 ]
             upd = requests.patch(full_url, json=body, headers=header, timeout=10)
             if upd.status_code == 200:
-                logging.info('%s updated', element)
+                logging.info("%s updated", element)
