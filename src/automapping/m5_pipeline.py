@@ -1,6 +1,7 @@
 from typing import Iterable
 
 import requests
+import logging
 
 from .language import Language
 
@@ -36,8 +37,8 @@ class M5:
         """
         Upload translated data to M5
         """
+        logging.basicConfig(level=logging.INFO)
         header = {"Content-type": "application/json", "Accept": "application/json"}
-        successfull_list_of_elements = []
         for i, element in enumerate(names_of_elements):
             full_url = "/".join((self.url, element))
             body = requests.get(full_url, timeout=10).json()
@@ -54,7 +55,4 @@ class M5:
                 ]
             upd = requests.patch(full_url, json=body, headers=header, timeout=10)
             if upd.status_code == 200:
-                successfull_list_of_elements.append(element)
-        print(
-            f"Upload translation for elements {successfull_list_of_elements} completed successfully"
-        )
+                logging.info('%s updated', element)
