@@ -12,3 +12,4 @@ openpyxl
 fsspec
 sentencepiece
 sacremoses
+requests
