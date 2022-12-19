@@ -25,14 +25,19 @@ class ExcelLoader(Loader):
     Load a column from a given Excel file.
     """
 
-    def __init__(self, path: str, column: str, language: Language):
+    def __init__(
+        self, path: str, column_ident: str, column_variable: str, language: Language
+    ):
         super().__init__(language)
         self.path = path
-        self.column = column
-        self.data = pd.read_excel(self.path, usecols=[self.column])
+        self.column_ident = column_ident
+        self.column_variable = column_variable
+        self.data = pd.read_excel(
+            self.path, usecols=[self.column_ident, self.column_variable]
+        )
 
-    def __iter__(self) -> Iterable[str]:
+    def __iter__(self) -> Iterable[tuple]:
         self.data = self.data.replace([" ", ""], np.nan)
-        self.data[self.column] = self.data[self.column].str.strip()
-        self.data = self.data[self.column].dropna(axis=0)
+        self.data[self.column_variable] = self.data[self.column_variable].str.strip()
+        self.data = self.data.apply(tuple, axis=1)
         return iter(self.data)
