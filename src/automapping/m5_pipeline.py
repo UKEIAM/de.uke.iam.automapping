@@ -2,6 +2,7 @@ from typing import Iterable
 
 import requests
 import logging
+import pandas as pd
 
 from .language import Language
 
@@ -61,3 +62,18 @@ class M5:
             upd = requests.patch(full_url, json=body, headers=header, timeout=10)
             if upd.status_code == 200:
                 logging.info("%s updated", element)
+
+
+    def concept_uploader(self, names_of_elements: list, mapping_result: pd.DataFrame, vocabulary_id: str, concepts: pd.DataFrame, voc_info: pd.DataFrame):
+        """
+        Upload mapped concepts to M5
+        """
+        concepts = concepts[(concepts["vocabulary_id"].isin([vocabulary_id])) & (concepts["standard_concept"] == "S")]
+        mapping_result=mapping_result.merge(concepts, left_on='targetConceptID', right_on='concept_id', how='left')
+        mapping_result=mapping_result[['vocabulary_id', 'concept_code', 'MatchScore']]
+        mapping_result['Version']=df_voc[df_voc['vocabulary_id']=='SNOMED'].iloc[0]['vocabulary_version']
+        header = {"Content-type": "application/json", "Accept": "application/json"}
+        for i, element in enumerate(names_of_elements):
+            full_url = "/".join((self.url, element))
+            body = requests.get(full_url, timeout=10).json()
+
