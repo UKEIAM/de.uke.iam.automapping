@@ -40,7 +40,6 @@ class HuggingFace(Translator):
     ) -> Sequence[tuple]:
         tr_list = []
         translator = pipeline("translation", self.model)
-        data = list(data)
         samples = list(preprocessor(data))
         for sample in translator(samples):
             tr_list.append(sample.get("translation_text"))
