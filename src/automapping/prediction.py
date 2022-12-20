@@ -7,6 +7,7 @@ class Prediction:
     A prediction with associated confidence score.
     """
 
+    source_id: str
     source_name: str
     concept_name: str
     concept_id: int
