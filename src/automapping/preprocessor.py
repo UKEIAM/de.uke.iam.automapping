@@ -37,7 +37,7 @@ class Abbreviations(Preprocessor):
         )
 
     def __call__(self, data: Iterable[str]) -> Iterable[str]:
-        for sample in data:
+        for _, sample in data:
             for _, original, replacement in self.mapping.itertuples():
                 sample = re.sub(r"\b" + original + r"[^\w]", replacement + " ", sample)
             yield sample

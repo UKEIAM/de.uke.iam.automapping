@@ -1,3 +1,4 @@
+from typing import Iterable
 from abc import abstractmethod
 from transformers import pipeline
 from typing import Sequence
@@ -35,11 +36,12 @@ class HuggingFace(Translator):
         self.model = f"Helsinki-NLP/opus-mt-{self.source_language.value}-{self.target_language.value}"
 
     def translate(
-        self, data: Loader, preprocessor: Sequence[Preprocessor]
-    ) -> Sequence[str]:
+        self, data: Iterable[str], preprocessor: Sequence[Preprocessor]
+    ) -> Sequence[tuple]:
         tr_list = []
         translator = pipeline("translation", self.model)
+        data = list(data)
         samples = list(preprocessor(data))
         for sample in translator(samples):
             tr_list.append(sample.get("translation_text"))
-        return tr_list
+        return list(zip(list(zip(*list(data)))[0], tr_list))
