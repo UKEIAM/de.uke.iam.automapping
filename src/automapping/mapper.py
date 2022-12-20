@@ -38,7 +38,7 @@ class TfIdf(Mapper):
     def __call__(self, data: list) -> Predictions:
         matrix_with_similarity_score = (
             self._create_matrix_with_cosine_sim_between_term_concept(
-                list(zip(*list(data)))[0]
+                list(zip(*list(data)))[1]
             )
         )
         predictions_list = []
