@@ -1,7 +1,6 @@
-from typing import Iterable
+from typing import Iterable, Sequence
 from abc import abstractmethod
 from transformers import pipeline
-from typing import Sequence
 from .loader import Loader
 from .language import Language
 from .preprocessor import Preprocessor
