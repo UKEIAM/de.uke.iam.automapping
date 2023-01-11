@@ -14,7 +14,7 @@ class Loader:
     def __init__(self, language: Language):
         self.language = language
 
-    def __iter__(self) -> Iterable[str]:
+    def __iter__(self) -> Iterable[tuple]:
         raise NotImplementedError(
             "Abstract method required to be overwritten in subclass"
         )
