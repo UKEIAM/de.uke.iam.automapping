@@ -58,8 +58,8 @@ class EntityExtractor(Preprocessor):
         self.nlp.Defaults.stop_words.remove("back")
         self.nlp.Defaults.stop_words.add("doctor")
 
-    def __call__(self, data: Iterable[str]) -> Iterable[tuple]:
-        for identifier, sample in data:
+    def __call__(self, data: Iterable[str]) -> Iterable[str]:
+        for sample in data:
             sample = sample.lower()
             token_list = []
             doc = self.nlp(sample)
@@ -69,4 +69,4 @@ class EntityExtractor(Preprocessor):
                 if not token.is_stop and not token.is_punct
             ]
             text = " ".join(token_list)
-            yield (identifier, text)
+            yield text
