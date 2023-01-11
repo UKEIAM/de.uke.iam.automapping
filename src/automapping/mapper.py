@@ -35,11 +35,9 @@ class TfIdf(Mapper):
         self.tfidf = TfidfVectorizer()
         self.concepts_tfidf = self.tfidf.fit_transform(self.concepts.names)
 
-    def __call__(self, data: list) -> Predictions:
+    def __call__(self, data: str, source_data: tuple) -> Predictions:
         matrix_with_similarity_score = (
-            self._create_matrix_with_cosine_sim_between_term_concept(
-                list(zip(*list(data)))[1]
-            )
+            self._create_matrix_with_cosine_sim_between_term_concept(data)
         )
         predictions_list = []
         for i in range(matrix_with_similarity_score.shape[0]):
@@ -50,8 +48,8 @@ class TfIdf(Mapper):
             ):
                 predictions_list.append(
                     Prediction(
-                        list(zip(*list(data)))[0][i],
-                        list(zip(*list(data)))[1][i],
+                        list(zip(*list(source_data)))[0][i],
+                        data[i],
                         self.concepts.names[seq_number],
                         self.concepts.concept_id[seq_number],
                         self.concepts.domain_ids[seq_number],
