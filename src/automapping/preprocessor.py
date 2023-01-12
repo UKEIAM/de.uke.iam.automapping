@@ -1,4 +1,4 @@
-from typing import Iterable, Mapping
+from typing import Iterable, Mapping, Sequence
 import re
 import pandas as pd
 import spacy
@@ -9,7 +9,7 @@ class Preprocessor:
     A step in the pipeline preprocessing the raw input.
     """
 
-    def __call__(self, data: Iterable[str]) -> Iterable[str]:
+    def __call__(self, data: Sequence[str]) -> Iterable[str]:
 
         raise NotImplementedError(
             "Abstract method required to be overwritten in subclass"
@@ -36,8 +36,8 @@ class Abbreviations(Preprocessor):
             abbreviations[[name_of_abbreviation_column, name_of_description_column]]
         )
 
-    def __call__(self, data: Iterable[str]) -> Iterable[str]:
-        for _, sample in data:
+    def __call__(self, data: Sequence[str]) -> Iterable[str]:
+        for sample in data:
             for _, original, replacement in self.mapping.itertuples():
                 sample = re.sub(r"\b" + original + r"[^\w]", replacement + " ", sample)
             yield sample
@@ -58,7 +58,7 @@ class EntityExtractor(Preprocessor):
         self.nlp.Defaults.stop_words.remove("back")
         self.nlp.Defaults.stop_words.add("doctor")
 
-    def __call__(self, data: Iterable[str]) -> Iterable[str]:
+    def __call__(self, data: Sequence[str]) -> Iterable[str]:
         for sample in data:
             sample = sample.lower()
             token_list = []
