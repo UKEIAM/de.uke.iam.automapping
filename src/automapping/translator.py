@@ -24,7 +24,7 @@ class Translator:
 
 class HuggingFace(Translator):
     """
-    Use HiggingFace for translations.
+    Use HuggingFace for translations.
     """
 
     def __init__(self, source_language: Language, target_language: Language):
