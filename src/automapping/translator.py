@@ -12,7 +12,7 @@ class Translator:
 
     @abstractmethod
     def translate(
-        self, data: Sequence[tuple], preprocessor: Sequence[Preprocessor]
+        self, data: Sequence[str], preprocessor: Sequence[Preprocessor]
     ) -> Sequence[str]:
         """
         Translation step
@@ -33,7 +33,7 @@ class HuggingFace(Translator):
         self.model = f"Helsinki-NLP/opus-mt-{self.source_language.value}-{self.target_language.value}"
 
     def translate(
-        self, data: Sequence[tuple], preprocessor: Sequence[Preprocessor]
+        self, data: Sequence[str], preprocessor: Sequence[Preprocessor]
     ) -> Sequence[str]:
         tr_list = []
         translator = pipeline("translation", self.model)
