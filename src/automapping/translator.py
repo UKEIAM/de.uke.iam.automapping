@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from transformers import pipeline
 from typing import Sequence
-from .loader import Loader
 from .language import Language
 from .preprocessor import Preprocessor
 
@@ -13,7 +12,7 @@ class Translator:
 
     @abstractmethod
     def translate(
-        self, data: Loader, preprocessor: Sequence[Preprocessor]
+        self, data: Sequence[str], preprocessor: Sequence[Preprocessor]
     ) -> Sequence[str]:
         """
         Translation step
@@ -25,8 +24,7 @@ class Translator:
 
 class HuggingFace(Translator):
     """
-    Use HiggingFace for translations.
-
+    Use HuggingFace for translations.
     """
 
     def __init__(self, source_language: Language, target_language: Language):
@@ -35,7 +33,7 @@ class HuggingFace(Translator):
         self.model = f"Helsinki-NLP/opus-mt-{self.source_language.value}-{self.target_language.value}"
 
     def translate(
-        self, data: Loader, preprocessor: Sequence[Preprocessor]
+        self, data: Sequence[str], preprocessor: Sequence[Preprocessor]
     ) -> Sequence[str]:
         tr_list = []
         translator = pipeline("translation", self.model)

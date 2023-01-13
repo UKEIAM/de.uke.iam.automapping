@@ -33,6 +33,7 @@ class Predictions:
         """
         df_with_results = pd.DataFrame.from_dict(list(self._detections))
         df_with_results.columns = [
+            "SourceID",
             "SourceName",
             "targetConceptName",
             "targetConceptID",
@@ -49,7 +50,7 @@ class Predictions:
         Get a dataframe with the predictions.
         """
         df_with_final_results = (
-            self.df_with_results.groupby("SourceName")
+            self.df_with_results.groupby(["SourceID", "SourceName"])
             .head(num_guesses)
             .reset_index(drop=True)
         )
@@ -57,7 +58,7 @@ class Predictions:
             "SourceName"
         ).reset_index(drop=True)
         df_with_final_results = (
-            df_with_final_results.groupby(["SourceName"])
+            df_with_final_results.groupby(["SourceID", "SourceName"])
             .apply(lambda x: x.sort_values(["MatchScore"], ascending=False))
             .reset_index(drop=True)
         )

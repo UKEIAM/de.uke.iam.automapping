@@ -35,7 +35,7 @@ class TfIdf(Mapper):
         self.tfidf = TfidfVectorizer()
         self.concepts_tfidf = self.tfidf.fit_transform(self.concepts.names)
 
-    def __call__(self, data: str) -> Predictions:
+    def __call__(self, data: Sequence[str], identifiers: Sequence[str]) -> Predictions:
         matrix_with_similarity_score = (
             self._create_matrix_with_cosine_sim_between_term_concept(data)
         )
@@ -48,6 +48,7 @@ class TfIdf(Mapper):
             ):
                 predictions_list.append(
                     Prediction(
+                        identifiers[i],
                         data[i],
                         self.concepts.names[seq_number],
                         self.concepts.concept_id[seq_number],
