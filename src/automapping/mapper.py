@@ -53,6 +53,7 @@ class TfIdf(Mapper):
                         self.concepts.names[seq_number],
                         self.concepts.concept_id[seq_number],
                         self.concepts.domain_ids[seq_number],
+                        self.concepts.voc_version[seq_number],
                         score,
                     )
                 )

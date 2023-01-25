@@ -38,6 +38,7 @@ class Predictions:
             "targetConceptName",
             "targetConceptID",
             "targetDomainID",
+            "targetVocabularyVersion",
             "MatchScore",
         ]
         df_with_results = df_with_results.drop_duplicates(

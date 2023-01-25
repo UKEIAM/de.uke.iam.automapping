@@ -12,4 +12,5 @@ class Prediction:
     concept_name: str
     concept_id: int
     domain_id: str
+    voc_version: str
     confidence_score: float
