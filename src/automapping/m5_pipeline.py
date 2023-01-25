@@ -77,7 +77,7 @@ class M5:
                 body["concepts"].append(
                     {
                         "conceptType": vocabulary_id,
-                        "conceptCode": data["targetConceptID"],  # make it concept_code
+                        "conceptCode": data["targetConceptCode"],
                         "conceptVersion": data["targetVocabularyVersion"],
                         "conceptScore": data["MatchScore"],
                         "verified": "false",
