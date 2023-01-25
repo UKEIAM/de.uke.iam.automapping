@@ -37,6 +37,7 @@ class Predictions:
             "SourceName",
             "targetConceptName",
             "targetConceptID",
+            "targetConceptCode",
             "targetDomainID",
             "targetVocabularyVersion",
             "MatchScore",

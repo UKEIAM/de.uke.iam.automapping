@@ -12,6 +12,7 @@ class Concept:
 
     names: Sequence[str]
     concept_id: Sequence[int]
+    concept_code: Sequence[int]
     domain_ids: Sequence[str]
     voc_version: Sequence[str]
 
@@ -33,10 +34,13 @@ class Concept:
             concepts["concept_name"].replace({"X]": "X] "}, regex=True).str.lower()
         )
         main_concept_ids = concepts["concept_id"].tolist()
+        main_concept_codes = concepts["concept_code"].tolist()
         main_domain_ids = concepts["domain_id"].tolist()
         main_concept_names = list(map(str, concepts["concept_name"]))
         synonyms = synonyms[synonyms["concept_id"].isin(main_concept_ids)]
+        synonyms = synonyms.merge(concepts, on="concept_id", how="left")
         synonyms_concept_ids = synonyms["concept_id"].tolist()
+        synonyms_concept_codes = synonyms["concept_code"].tolist()
         synonyms_domain_ids = ["Synonym"] * synonyms.shape[0]
         synonyms_concept_names = list(
             map(str, synonyms["concept_synonym_name"].str.lower())
@@ -50,6 +54,7 @@ class Concept:
         return Concept(
             main_concept_names + synonyms_concept_names,
             main_concept_ids + synonyms_concept_ids,
+            main_concept_codes + synonyms_concept_codes,
             main_domain_ids + synonyms_domain_ids,
             voc_version_list,
         )
