@@ -41,6 +41,7 @@ class ExcelLoader(Loader):
     def __call__(self) -> Tuple["pd.Series[str]", "pd.Series[str]"]:
         self.data = self.data.replace([" ", ""], np.nan)
         self.data[self.column_variable] = self.data[self.column_variable].str.strip()
-        identifiers = self.data[self.column_ident].dropna(axis=0)
-        variables = self.data[self.column_variable].dropna(axis=0)
+        self.data = self.data.dropna(axis=0)
+        identifiers = self.data[self.column_ident]
+        variables = self.data[self.column_variable]
         return identifiers, variables
