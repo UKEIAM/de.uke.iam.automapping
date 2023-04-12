@@ -23,11 +23,8 @@ def translate_table():
     configuration = M5(
         host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
     )
-    list_elements = []
-    list_variables = []
-    for i, j in configuration.loader():
-        list_elements.append(i)
-        list_variables.append(j)
+    list_elements = [i for i,_ in configuration.loader()]
+    list_variables = [j for _,j in configuration.loader()]
     model_translator = HuggingFace(Language.GERMAN, Language.ENGLISH)
     translated_variables = model_translator.translate(
         list_variables,
