@@ -7,22 +7,32 @@ from flask_restx import Api, Resource, fields
 
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Translate Table API', description='A simple translation API')
+api = Api(
+    app,
+    version="1.0",
+    title="Translate Table API",
+    description="A simple translation API",
+)
 
-# Define a namespace 
-ns = api.namespace('api', description='Translation operations')
+ns = api.namespace("api", description="Translation operations")
 
-translate_model = api.model('TranslateTable', {
-    'host': fields.String(required=True, description='Host address'),
-    'data_dictionary': fields.String(required=True, description='The name of the data dictionary'),
-    'version': fields.Integer(required=True, description='Version number'),
-    'table': fields.String(required=True, description='Table name'),
-})
+translate_model = api.model(
+    "TranslateTable",
+    {
+        "host": fields.String(required=True, description="Host address"),
+        "data_dictionary": fields.String(
+            required=True, description="The name of the data dictionary"
+        ),
+        "version": fields.Integer(required=True, description="Version number"),
+        "table": fields.String(required=True, description="Table name"),
+    },
+)
 
-@ns.route('/translate_table')
+
+@ns.route("/translate_table")
 class TranslateTable(Resource):
     @api.expect(translate_model)
-    @api.response(200, 'Success')
+    @api.response(200, "Success")
     def post(self):
         """
         Endpoint to translate table
@@ -51,11 +61,14 @@ class TranslateTable(Resource):
         )
         configuration.translation_uploader(list_elements, list(translated_variables))
 
-        return jsonify({
-            "status": "success",
-            "message": "All translated variables have been uploaded.",
-            "variables": list(translated_variables),
-        })
+        return jsonify(
+            {
+                "status": "success",
+                "message": "All translated variables have been uploaded.",
+                "variables": list(translated_variables),
+            }
+        )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

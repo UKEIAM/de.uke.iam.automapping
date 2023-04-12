@@ -1,10 +1,8 @@
-from flask import Flask, request, jsonify
-import sys
-sys.path.append('C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/automapping/')
 from automapping.m5_pipeline import M5
 from automapping.language import Language
 from automapping.preprocessor import Abbreviations
 from automapping.translator import HuggingFace
+from flask import Flask, request, jsonify
 
 
 app = Flask(__name__)
@@ -19,8 +17,8 @@ def translate_table():
     data_dictionary = request.form.get("data_dictionary")
     version = request.form.get("version")
     table = request.form.get("table")
-    #source_language = request.form.get('source_language')
-    #target_language = request.form.get('target_language')
+    # source_language = request.form.get('source_language')
+    # target_language = request.form.get('target_language')
 
     configuration = M5(
         host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
@@ -41,11 +39,13 @@ def translate_table():
     )
     configuration.translation_uploader(list_elements, list(translated_variables))
 
-    return jsonify({
-        "status": "success",
-        "message": "All translated variables have been uploaded.",
-        "variables": list(translated_variables),
-    })
+    return jsonify(
+        {
+            "status": "success",
+            "message": "All translated variables have been uploaded.",
+            "variables": list(translated_variables),
+        }
+    )
 
 
 if __name__ == "__main__":
