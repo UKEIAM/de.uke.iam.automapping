@@ -3,6 +3,7 @@ from automapping.language import Language
 from automapping.preprocessor import Abbreviations
 from automapping.translator import HuggingFace
 from flask import Flask, request, jsonify
+import yaml
 
 
 app = Flask(__name__)
@@ -20,18 +21,21 @@ def translate_table():
     # source_language = request.form.get('source_language')
     # target_language = request.form.get('target_language')
 
+    with open("config.yaml", encoding="utf-8") as file:
+        config = yaml.safe_load(file)
+
     configuration = M5(
         host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
     )
-    list_elements = [i for i,_ in configuration.loader()]
-    list_variables = [j for _,j in configuration.loader()]
+    list_elements = [i for i, _ in configuration.loader()]
+    list_variables = [j for _, j in configuration.loader()]
     model_translator = HuggingFace(Language.GERMAN, Language.ENGLISH)
     translated_variables = model_translator.translate(
         list_variables,
         Abbreviations.load_abbreviations(
-            "C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/automapping/german_abbreviation.xlsx",
-            "Abbreviation",
-            "Description",
+            config["abbreviations"]["file"],
+            config["abbreviations"]["name_of_abbreviation_column"],
+            config["abbreviations"]["name_of_description_column"],
         ),
     )
     configuration.translation_uploader(list_elements, list(translated_variables))
