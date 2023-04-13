@@ -32,6 +32,10 @@ translate_model = api.model(
 
 @ns.route("/translate_table")
 class TranslateTable(Resource):
+    """
+    Endpoint to translate table with swagger documentation
+    """
+
     @api.expect(translate_model)
     @api.response(200, "Success")
     def post(self):
@@ -42,7 +46,10 @@ class TranslateTable(Resource):
         data_dictionary = request.form.get("data_dictionary")
         version = request.form.get("version")
         table = request.form.get("table")
-        with open("C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/config.yaml", encoding="utf-8") as file:
+        with open(
+            "C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/config.yaml",
+            encoding="utf-8",
+        ) as file:
             config = yaml.safe_load(file)
 
         configuration = M5(
