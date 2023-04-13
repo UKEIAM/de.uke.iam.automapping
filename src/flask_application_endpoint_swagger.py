@@ -42,7 +42,7 @@ class TranslateTable(Resource):
         data_dictionary = request.form.get("data_dictionary")
         version = request.form.get("version")
         table = request.form.get("table")
-        with open("config.yaml", encoding="utf-8") as file:
+        with open("C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/config.yaml", encoding="utf-8") as file:
             config = yaml.safe_load(file)
 
         configuration = M5(
