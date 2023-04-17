@@ -132,7 +132,6 @@ class MapTable(Resource):
         model_entity = EntityExtractor()
         prep_data = model_entity(translated_variables)
         list_of_prep_data = list(prep_data)
-        print(list_of_prep_data)
         concepts = pd.read_csv(
             config["concepts"]["file"],
             on_bad_lines="skip",
@@ -156,8 +155,8 @@ class MapTable(Resource):
         )
         model_map = TfIdf(concepts)
         mapping = model_map(list_of_prep_data, list_elements)
-        df = Predictions.to_df(mapping, int(num_maps))
-        configuration.concept_uploader(df, str(vocabulary_name))
+        df_predictions= Predictions.to_df(mapping, int(num_maps))
+        configuration.concept_uploader(df_predictions, str(vocabulary_name))
         return {
             "status": "success",
             "message": "The variables from the table has been successfully mapped.",
