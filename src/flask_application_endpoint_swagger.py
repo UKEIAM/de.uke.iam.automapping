@@ -1,9 +1,13 @@
 from automapping.m5_pipeline import M5
 from automapping.language import Language
-from automapping.preprocessor import Abbreviations
+from automapping.preprocessor import Abbreviations, EntityExtractor
 from automapping.translator import HuggingFace
+from automapping.concept import Concept
+from automapping.mapper import TfIdf
+from automapping.detections import Predictions
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
+import pandas as pd
 import yaml
 
 
@@ -11,11 +15,11 @@ app = Flask(__name__)
 api = Api(
     app,
     version="1.0",
-    title="Translate Table API",
-    description="A simple translation API",
+    title="API for M5",
+    description="The api consists of the endpoint for the translation of terms from German to English and the endpoint of the mapping between German terms into OMOP within translation",
 )
 
-ns = api.namespace("api", description="Translation operations")
+ns = api.namespace("API")
 
 translate_model = api.model(
     "TranslateTable",
@@ -46,11 +50,6 @@ class TranslateTable(Resource):
         data_dictionary = request.form.get("data_dictionary")
         version = request.form.get("version")
         table = request.form.get("table")
-        with open(
-            "C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/config.yaml",
-            encoding="utf-8",
-        ) as file:
-            config = yaml.safe_load(file)
 
         configuration = M5(
             host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
@@ -77,5 +76,98 @@ class TranslateTable(Resource):
         )
 
 
+map_table_model = api.model(
+    "MapTable",
+    {
+        "host": fields.String(required=True, description="Host address"),
+        "data_dictionary": fields.String(
+            required=True, description="The name of the data dictionary"
+        ),
+        "version": fields.Integer(required=True, description="Version number"),
+        "table": fields.String(required=True, description="Table name"),
+        "vocabulary_name": fields.String(
+            required=True, description="Vocabulary name (SNOMED, LOINC)"
+        ),
+        "num_maps": fields.Integer(
+            required=True, description="Number of maps to generate"
+        ),
+    },
+)
+
+
+@ns.route("/map_table")
+class MapTable(Resource):
+    """
+    Endpoint to translate and map table
+    """
+
+    @api.expect(map_table_model)
+    @api.response(200, "Success")
+    def post(self):
+        """
+        Endpoint to map table
+        """
+        host = request.form.get("host")
+        data_dictionary = request.form.get("data_dictionary")
+        version = request.form.get("version")
+        table = request.form.get("table")
+        vocabulary_name = request.form.get("vocabulary_name")
+        num_maps = request.form.get("num_maps")
+        print(host, data_dictionary, version, vocabulary_name, num_maps)
+
+        configuration = M5(
+            host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
+        )
+        list_elements = [i for i, _ in configuration.loader()]
+        list_variables = [j for _, j in configuration.loader()]
+        model_translator = HuggingFace(Language.GERMAN, Language.ENGLISH)
+        translated_variables = model_translator.translate(
+            list_variables,
+            Abbreviations.load_abbreviations(
+                config["abbreviations"]["file"],
+                config["abbreviations"]["name_of_abbreviation_column"],
+                config["abbreviations"]["name_of_description_column"],
+            ),
+        )
+        model_entity = EntityExtractor()
+        prep_data = model_entity(translated_variables)
+        list_of_prep_data = list(prep_data)
+        print(list_of_prep_data)
+        concepts = pd.read_csv(
+            config["concepts"]["file"],
+            on_bad_lines="skip",
+            delimiter="\t",
+            low_memory=False,
+        )
+        synonyms = pd.read_csv(
+            config["synonyms"]["file"],
+            on_bad_lines="skip",
+            delimiter="\t",
+            low_memory=False,
+        )
+        vocabulary_table = pd.read_csv(
+            config["vocabulary_table"]["file"],
+            on_bad_lines="skip",
+            delimiter="\t",
+            low_memory=False,
+        )
+        concepts = Concept.concatenate_concept_with_their_synonyms(
+            concepts, synonyms, vocabulary_table, str(vocabulary_name)
+        )
+        model_map = TfIdf(concepts)
+        mapping = model_map(list_of_prep_data, list_elements)
+        df = Predictions.to_df(mapping, int(num_maps))
+        configuration.concept_uploader(df, str(vocabulary_name))
+        return {
+            "status": "success",
+            "message": "The variables from the table has been successfully mapped.",
+        }
+
+
 if __name__ == "__main__":
+    with open(
+        "C://Users/admin/OneDrive/Desktop/work_project/de.uke.iam.automapping/src/config.yaml",
+        encoding="utf-8",
+    ) as file:
+        config = yaml.safe_load(file)
     app.run(debug=True)
