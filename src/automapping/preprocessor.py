@@ -10,7 +10,6 @@ class Preprocessor:
     """
 
     def __call__(self, data: Sequence[str]) -> Iterable[str]:
-
         raise NotImplementedError(
             "Abstract method required to be overwritten in subclass"
         )
