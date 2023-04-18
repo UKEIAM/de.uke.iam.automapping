@@ -21,6 +21,32 @@ api = Api(
 
 ns = api.namespace("api", description="for M5")
 
+
+def load_variables(configuration):
+    """
+    Function to load variables and name of elements from M5 tables
+    """
+    list_elements = [i for i, _ in configuration.loader()]
+    list_variables = [j for _, j in configuration.loader()]
+    return list_elements, list_variables
+
+
+def translate_and_process_data(list_variables):
+    """
+    Function to translate and preprocess variables
+    """
+    model_translator = HuggingFace(Language.GERMAN, Language.ENGLISH)
+    translated_variables = model_translator.translate(
+        list_variables,
+        Abbreviations.load_abbreviations(
+            config["abbreviations"]["file"],
+            config["abbreviations"]["name_of_abbreviation_column"],
+            config["abbreviations"]["name_of_description_column"],
+        ),
+    )
+    return translated_variables
+
+
 translate_model = api.model(
     "TranslateTable",
     {
@@ -50,21 +76,11 @@ class TranslateTable(Resource):
         data_dictionary = request.form.get("data_dictionary")
         version = request.form.get("version")
         table = request.form.get("table")
-
         configuration = M5(
             host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
         )
-        list_elements = [i for i, _ in configuration.loader()]
-        list_variables = [j for _, j in configuration.loader()]
-        model_translator = HuggingFace(Language.GERMAN, Language.ENGLISH)
-        translated_variables = model_translator.translate(
-            list_variables,
-            Abbreviations.load_abbreviations(
-                config["abbreviations"]["file"],
-                config["abbreviations"]["name_of_abbreviation_column"],
-                config["abbreviations"]["name_of_description_column"],
-            ),
-        )
+        list_elements, list_variables = load_variables(configuration)
+        translated_variables = translate_and_process_data(list_variables)
         configuration.translation_uploader(list_elements, list(translated_variables))
 
         return jsonify(
@@ -117,17 +133,8 @@ class MapTable(Resource):
         configuration = M5(
             host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
         )
-        list_elements = [i for i, _ in configuration.loader()]
-        list_variables = [j for _, j in configuration.loader()]
-        model_translator = HuggingFace(Language.GERMAN, Language.ENGLISH)
-        translated_variables = model_translator.translate(
-            list_variables,
-            Abbreviations.load_abbreviations(
-                config["abbreviations"]["file"],
-                config["abbreviations"]["name_of_abbreviation_column"],
-                config["abbreviations"]["name_of_description_column"],
-            ),
-        )
+        list_elements, list_variables = load_variables(configuration)
+        translated_variables = translate_and_process_data(list_variables)
         model_entity = EntityExtractor()
         preprocessed_data = list(model_entity(translated_variables))
         concepts = pd.read_csv(
