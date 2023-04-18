@@ -155,7 +155,7 @@ class MapTable(Resource):
         )
         model_map = TfIdf(concepts)
         mapping = model_map(list_of_prep_data, list_elements)
-        df_predictions= Predictions.to_df(mapping, int(num_maps))
+        df_predictions = Predictions.to_df(mapping, int(num_maps))
         configuration.concept_uploader(df_predictions, str(vocabulary_name))
         return {
             "status": "success",
