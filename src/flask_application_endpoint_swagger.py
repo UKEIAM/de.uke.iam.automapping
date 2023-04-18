@@ -113,7 +113,6 @@ class MapTable(Resource):
         table = request.form.get("table")
         vocabulary_name = request.form.get("vocabulary_name")
         num_maps = request.form.get("num_maps")
-        print(host, data_dictionary, version, vocabulary_name, num_maps)
 
         configuration = M5(
             host, data_dictionary, version, table, Language.GERMAN, Language.ENGLISH
@@ -130,8 +129,7 @@ class MapTable(Resource):
             ),
         )
         model_entity = EntityExtractor()
-        prep_data = model_entity(translated_variables)
-        list_of_prep_data = list(prep_data)
+        preprocessed_data = list(model_entity(translated_variables))
         concepts = pd.read_csv(
             config["concepts"]["file"],
             on_bad_lines="skip",
@@ -154,7 +152,7 @@ class MapTable(Resource):
             concepts, synonyms, vocabulary_table, str(vocabulary_name)
         )
         model_map = TfIdf(concepts)
-        mapping = model_map(list_of_prep_data, list_elements)
+        mapping = model_map(preprocessed_data, list_elements)
         df_predictions = Predictions.to_df(mapping, int(num_maps))
         configuration.concept_uploader(df_predictions, str(vocabulary_name))
         return {
