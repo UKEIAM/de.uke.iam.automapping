@@ -16,7 +16,7 @@ api = Api(
     app,
     version="1.0",
     title="API for M5",
-    description="The api consists of the endpoint for the translation of terms from German to English and the endpoint of the mapping between German terms into OMOP within translation",
+    description="German-English term translation & German-OMOP mapping within translation",
 )
 
 ns = api.namespace("API")
