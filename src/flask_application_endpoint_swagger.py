@@ -19,7 +19,7 @@ api = Api(
     description="German-English term translation & German-OMOP mapping within translation",
 )
 
-ns = api.namespace("API")
+ns = api.namespace("api", description='for M5')
 
 translate_model = api.model(
     "TranslateTable",
