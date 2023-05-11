@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Sequence
+from typing import List
 from .concept_ref import Concept
 
 import pandas as pd
@@ -11,7 +11,7 @@ class Concepts:
     Concepts in a medical ontology like SNOMED-CT.
     """
 
-    concepts: Sequence[Concept]
+    concepts: List[Concept]
 
     @staticmethod
     def concatenate_concept_with_their_synonyms(

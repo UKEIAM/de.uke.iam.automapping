@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from .concept_ref import Concept
 
 
 @dataclass
@@ -8,3 +9,4 @@ class Prediction:
     """
 
     concept: Concept
+    score: float
