@@ -359,3 +359,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,pydev,pycharm+all,jupyternotebooks,python,windows,linux,macos
 
 data/*
+*.xlsx
+*.csv
