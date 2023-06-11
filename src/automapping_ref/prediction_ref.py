@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .concept_ref import Concept
+from concept_ref import Concept
 
 
 @dataclass

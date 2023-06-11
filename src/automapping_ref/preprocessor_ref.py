@@ -1,5 +1,5 @@
 import spacy
-from .sample_ref import Sample
+from sample_ref import Sample
 from typing import Sequence, Mapping
 from nltk.stem import PorterStemmer
 import pandas as pd
@@ -60,7 +60,6 @@ class SpacyPreprocessor(Preprocessor):
             "stopwords",
             "lemmatizer",
             "punctuation",
-            "lowercase",
         ],
     ):
         self.pipeline = pipeline
@@ -75,19 +74,23 @@ class SpacyPreprocessor(Preprocessor):
 
     def transform(self, sample: Sample) -> Sample:
         doc = self.nlp(sample.content)
-        # control the order of the preprocessing steps
         if "lowercase" in self.pipeline:
             sample.content = " ".join([token.text.lower() for token in doc])
+            doc = self.nlp(sample.content)
         if "stopwords" in self.pipeline:
             sample.content = " ".join(
                 [token.text for token in doc if not token.is_stop]
             )
+            doc = self.nlp(sample.content)
         if "lemmatizer" in self.pipeline:
             sample.content = " ".join([token.lemma_ for token in doc])
+            doc = self.nlp(sample.content)
         if "punctuation" in self.pipeline:
             sample.content = " ".join(
                 [token.text for token in doc if not token.is_punct]
             )
+            doc = self.nlp(sample.content)
         if "stemmer" in self.pipeline:
             sample.content = " ".join([self.stemmer.stem(token.text) for token in doc])
+            doc = self.nlp(sample.content)
         return sample

@@ -1,4 +1,4 @@
-from .language_ref import Language
+from language_ref import Language
 from typing import Iterable
 import requests
 import logging

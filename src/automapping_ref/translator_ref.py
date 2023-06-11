@@ -1,5 +1,4 @@
 from transformers import pipeline
-from automapping_ref.sample_ref import Sample
 from sample_ref import Sample
 from language_ref import Language
 
@@ -30,6 +29,6 @@ class HuggingFace(Translator):
 
     def translate(self, sample: Sample) -> Sample:
         translator = pipeline("translation", self.model)
-        sample.content = translator(sample.content).get("translation_text")
+        sample.content = translator(sample.content)[0].get("translation_text")
         sample.language = self.target_language
         return sample

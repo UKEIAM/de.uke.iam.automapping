@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from .concept_ref import Concept
+from concept_ref import Concept
 
 import pandas as pd
 
@@ -15,6 +15,9 @@ class Concepts:
 
     def __getitem__(self, index):
         return self.concepts[index]
+
+    def get_names(self):
+        return [concept.get_name() for concept in self.concepts]
 
     @staticmethod
     def concatenate_concept_with_their_synonyms(

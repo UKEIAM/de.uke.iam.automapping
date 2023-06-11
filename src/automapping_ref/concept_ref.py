@@ -24,3 +24,6 @@ class Concept(OmopConcept):
     concept_code: int
     domain_id: str
     voc_version: str
+
+    def get_name(self) -> str:
+        return self.name

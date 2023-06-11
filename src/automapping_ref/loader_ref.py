@@ -1,6 +1,6 @@
-from .sample_ref import Sample
-from .m5_ref import M5
-from .language_ref import Language
+from sample_ref import Sample
+from m5_ref import M5
+from language_ref import Language
 import pandas as pd
 import numpy as np
 

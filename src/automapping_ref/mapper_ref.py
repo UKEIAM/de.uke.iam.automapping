@@ -2,9 +2,9 @@ import heapq
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from .sample_ref import Sample
-from .prediction_ref import Prediction
-from .concepts_ref import Concepts
+from sample_ref import Sample
+from prediction_ref import Prediction
+from concepts_ref import Concepts
 
 
 class Mapper:
@@ -30,10 +30,7 @@ class TfIdf(Mapper):
     def __init__(self, concepts: Concepts):
         self.concepts = concepts
         self.tfidf = TfidfVectorizer()
-        concepts_names = []
-        for concept in self.concepts:
-            concepts_names.append(concept.get_name())
-        self.concepts_tfidf = self.tfidf.fit_transform(concepts_names)
+        self.concepts_tfidf = self.tfidf.fit_transform(concepts.get_names())
 
     def __call__(self, sample: Sample) -> Sample:
         sample_tfidf = self.tfidf.transform([sample.content])
