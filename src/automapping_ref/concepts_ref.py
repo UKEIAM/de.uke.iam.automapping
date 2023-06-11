@@ -13,6 +13,9 @@ class Concepts:
 
     concepts: List[Concept]
 
+    def __getitem__(self, index):
+        return self.concepts[index]
+
     @staticmethod
     def concatenate_concept_with_their_synonyms(
         concepts: pd.DataFrame,
