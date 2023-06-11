@@ -1,0 +1,67 @@
+from dataclasses import dataclass, field
+from typing import Sequence
+
+import pandas as pd
+
+from .sample_ref import Sample
+
+
+@dataclass
+class Predictions:
+    """
+    The results of the automapping.
+    """
+
+    _detections: Sequence[Sample]
+    df_with_results: pd.DataFrame = field(init=False)
+
+    def __post_init__(self):
+        self.df_with_results = self._filtering_dublicates()
+
+    def __len__(self):
+        return len(self._detections)
+
+    def __getitem__(self, key):
+        return self._detections[key]
+
+    def __setitem__(self, key: int, value: Sample):
+        self._detections[key] = value
+
+    def _filtering_dublicates(self):
+        """
+        Method to get unique ConceptID for each SourceName
+        """
+        df_with_results = pd.DataFrame.from_dict(list(self._detections))
+        df_with_results.columns = [
+            "SourceID",
+            "SourceName",
+            "targetConceptName",
+            "targetConceptID",
+            "targetConceptCode",
+            "targetDomainID",
+            "targetVocabularyVersion",
+            "MatchScore",
+        ]
+        df_with_results = df_with_results.drop_duplicates(
+            subset=["SourceName", "targetConceptID"], keep="first"
+        ).reset_index(drop=True)
+        return df_with_results
+
+    def to_df(self, num_guesses: int) -> pd.DataFrame:
+        """
+        Get a dataframe with the predictions.
+        """
+        df_with_final_results = (
+            self.df_with_results.groupby(["SourceID", "SourceName"])
+            .head(num_guesses)
+            .reset_index(drop=True)
+        )
+        df_with_final_results = df_with_final_results.sort_values(
+            "SourceName"
+        ).reset_index(drop=True)
+        df_with_final_results = (
+            df_with_final_results.groupby(["SourceID", "SourceName"])
+            .apply(lambda x: x.sort_values(["MatchScore"], ascending=False))
+            .reset_index(drop=True)
+        )
+        return df_with_final_results
