@@ -13,3 +13,5 @@ fsspec
 sentencepiece
 sacremoses
 requests
+flask
+flask_restx
