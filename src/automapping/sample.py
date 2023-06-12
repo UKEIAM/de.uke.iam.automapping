@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from language_ref import Language
-from prediction_ref import Prediction
+from .language import Language
+from .prediction import Prediction
 from typing import List
 
 

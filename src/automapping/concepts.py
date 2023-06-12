@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from concept_ref import Concept
+from .concept import Concept
 
 import pandas as pd
 
@@ -17,6 +17,9 @@ class Concepts:
         return self.concepts[index]
 
     def get_names(self):
+        """
+        Get names of the concepts
+        """
         return [concept.get_name() for concept in self.concepts]
 
     @staticmethod
@@ -55,20 +58,21 @@ class Concepts:
             main_concept_names + synonyms_concept_names
         )
         concepts_list = []
-        for i in range(len(main_concept_names)):
+        for i, name in enumerate(main_concept_names):
             concepts_list.append(
                 Concept(
-                    main_concept_names[i],
+                    name,
                     main_concept_ids[i],
                     main_concept_codes[i],
                     main_domain_ids[i],
                     voc_version_list[i],
                 )
             )
-        for i in range(len(synonyms_concept_names)):
+
+        for i, name in enumerate(synonyms_concept_names):
             concepts_list.append(
                 Concept(
-                    synonyms_concept_names[i],
+                    name,
                     synonyms_concept_ids[i],
                     synonyms_concept_codes[i],
                     synonyms_domain_ids[i],

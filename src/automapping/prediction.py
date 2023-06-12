@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from .concept import Concept
 
 
 @dataclass
@@ -7,11 +8,5 @@ class Prediction:
     A prediction with associated confidence score.
     """
 
-    source_id: str
-    source_name: str
-    concept_name: str
-    concept_id: int
-    concept_code: int
-    domain_id: str
-    voc_version: str
-    confidence_score: float
+    concept: Concept
+    score: float

@@ -1,13 +1,10 @@
 import heapq
-from typing import Sequence
-
-from numpy import matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from .concept import Concept
-from .detections import Predictions
+from .sample import Sample
 from .prediction import Prediction
+from .concepts import Concepts
 
 
 class Mapper:
@@ -15,7 +12,7 @@ class Mapper:
     The final step in the pipeline mapping text input to existing concepts.
     """
 
-    def __call__(self, data: str) -> Predictions:
+    def __call__(self, sample: Sample) -> Prediction:
         """
         Map a given input to the top guesses sorted in descending order.
         """
@@ -30,41 +27,21 @@ class TfIdf(Mapper):
     A mapper using Tf-Idf for mapping.
     """
 
-    def __init__(self, concepts: Sequence[Concept]):
+    def __init__(self, concepts: Concepts):
         self.concepts = concepts
         self.tfidf = TfidfVectorizer()
-        self.concepts_tfidf = self.tfidf.fit_transform(self.concepts.names)
+        self.concepts_tfidf = self.tfidf.fit_transform(concepts.get_names())
 
-    def __call__(self, data: Sequence[str], identifiers: Sequence[str]) -> Predictions:
-        matrix_with_similarity_score = (
-            self._create_matrix_with_cosine_sim_between_term_concept(data)
+    def __call__(self, sample: Sample) -> Sample:
+        sample_tfidf = self.tfidf.transform([sample.content])
+        matrix_with_similarity_score = cosine_similarity(
+            sample_tfidf, self.concepts_tfidf
         )
         predictions_list = []
-        for i in range(matrix_with_similarity_score.shape[0]):
-            for seq_number, score in heapq.nlargest(
-                100,
-                enumerate(matrix_with_similarity_score[i]),
-                key=lambda x: x[1],
-            ):
-                predictions_list.append(
-                    Prediction(
-                        identifiers[i],
-                        data[i],
-                        self.concepts.names[seq_number],
-                        self.concepts.concept_id[seq_number],
-                        self.concepts.concept_code[seq_number],
-                        self.concepts.domain_ids[seq_number],
-                        self.concepts.voc_version[seq_number],
-                        score,
-                    )
-                )
-        return Predictions(predictions_list)
-
-    def _create_matrix_with_cosine_sim_between_term_concept(
-        self, data: Sequence[str]
-    ) -> matrix:
-        """
-        Method for creating a matrix with cosine similarity between term and concept.
-        """
-        source_tfidf = self.tfidf.transform(data)
-        return cosine_similarity(source_tfidf, self.concepts_tfidf)
+        for seq_number, score in heapq.nlargest(
+            100,
+            enumerate(matrix_with_similarity_score[0]),
+            key=lambda x: x[1],
+        ):
+            predictions_list.append(Prediction(self.concepts[seq_number], score))
+        return Sample(sample.id, sample.content, sample.language, predictions_list)
