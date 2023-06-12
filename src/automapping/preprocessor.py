@@ -1,9 +1,10 @@
 import spacy
-from .sample import Sample
 from typing import Sequence, Mapping
 from nltk.stem import PorterStemmer
 import pandas as pd
 import re
+
+from .sample import Sample
 
 
 class Preprocessor:
