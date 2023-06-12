@@ -38,7 +38,6 @@ class ExcelLoader(Loader):
         self.data = pd.read_excel(
             self.path, usecols=[self.column_ident, self.column_variable]
         )
-        self.data = self.data.head(10)
         self.data.replace([" ", ""], np.nan, inplace=True)
         self.data[self.column_variable] = self.data[self.column_variable].str.strip()
         self.data.dropna(axis=0, inplace=True)
