@@ -53,15 +53,7 @@ class SpacyPreprocessor(Preprocessor):
     Use Spacy for preprocessing of the sample with custumized spacy pipeline.
     """
 
-    def __init__(
-        self,
-        pipeline: Sequence[str] = [
-            "lowercase",
-            "stopwords",
-            "lemmatizer",
-            "punctuation",
-        ],
-    ):
+    def __init__(self, pipeline: Sequence[str]):
         self.pipeline = pipeline
         self.nlp = spacy.load("en_core_web_sm")
         self.stemmer = PorterStemmer()
