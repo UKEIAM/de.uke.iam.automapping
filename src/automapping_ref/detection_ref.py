@@ -3,7 +3,7 @@ from typing import Sequence
 
 import pandas as pd
 
-from .sample_ref import Sample
+from sample_ref import Sample
 
 
 @dataclass
@@ -12,38 +12,50 @@ class Predictions:
     The results of the automapping.
     """
 
-    _detections: Sequence[Sample]
+    _detections: Sample
     df_with_results: pd.DataFrame = field(init=False)
 
     def __post_init__(self):
         self.df_with_results = self._filtering_dublicates()
 
-    def __len__(self):
-        return len(self._detections)
+    def __getitem__(self):
+        return self._detections
 
-    def __getitem__(self, key):
-        return self._detections[key]
-
-    def __setitem__(self, key: int, value: Sample):
-        self._detections[key] = value
+    def __setitem__(self, value: Sample):
+        self._detections = value
 
     def _filtering_dublicates(self):
         """
         Method to get unique ConceptID for each SourceName
         """
-        df_with_results = pd.DataFrame.from_dict(list(self._detections))
-        df_with_results.columns = [
-            "SourceID",
-            "SourceName",
-            "targetConceptName",
-            "targetConceptID",
-            "targetConceptCode",
-            "targetDomainID",
-            "targetVocabularyVersion",
-            "MatchScore",
-        ]
+        # Creating list of dictionaries from _detections
+        data_list = {
+            "SourceID": self._detections.id,
+            "SourceName": self._detections.content,
+            "concepts": [
+                {
+                    "targetConceptName": prediction.concept.name,
+                    "targetConceptID": prediction.concept.concept_id,
+                    "targetConceptCode": prediction.concept.concept_code,
+                    "targetDomainID": prediction.concept.domain_id,
+                    "targetVocabularyVersion": prediction.concept.voc_version,
+                    "MatchScore": prediction.score,
+                }
+                for prediction in self._detections.concepts
+            ],  # Converting each concept into dictionary
+        }
+        df_with_results = pd.DataFrame(data_list)
+        # from concepts column create new dataframe using dictionary inside and then combine them
+        df_with_results = pd.concat(
+            [
+                df_with_results.drop(["concepts"], axis=1),
+                df_with_results["concepts"].apply(pd.Series),
+            ],
+            axis=1,
+        )
+        # find duplicate by targetConceptID and keep first
         df_with_results = df_with_results.drop_duplicates(
-            subset=["SourceName", "targetConceptID"], keep="first"
+            subset=["SourceID", "targetConceptID"], keep="first"
         ).reset_index(drop=True)
         return df_with_results
 
