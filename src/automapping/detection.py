@@ -17,12 +17,6 @@ class Predictions:
     def __post_init__(self):
         self.df_with_results = self._filtering_dublicates()
 
-    def __getitem__(self):
-        return self._detections
-
-    def __setitem__(self, value: Sample):
-        self._detections = value
-
     def _filtering_dublicates(self):
         """
         Method to get unique ConceptID for each SourceName
