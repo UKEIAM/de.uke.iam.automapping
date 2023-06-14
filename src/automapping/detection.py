@@ -23,7 +23,7 @@ class Predictions:
         """
         # Creating list of dictionaries from _detections
         data_list = {
-            "SourceID": self._detections.id,
+            "SourceID": self._detections.unique_id,
             "SourceName": self._detections.content,
             "concepts": [
                 {
