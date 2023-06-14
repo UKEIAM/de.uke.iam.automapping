@@ -10,7 +10,7 @@ class Sample:
     A sample of data for mapping to medical ontologies.
     """
 
-    id: str
+    unique_id: str
     content: str
     language: Language
     concepts: List[Prediction] = field(default_factory=list)
