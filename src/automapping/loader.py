@@ -52,22 +52,8 @@ class M5loader(Loader):
     Load samples from M5
     """
 
-    def __init__(
-        self,
-        host: str,
-        data_dictionary: str,
-        version: int,
-        table: str,
-    ):
-        self.host = host
-        self.data_dictionary = data_dictionary
-        self.version = version
-        self.table = table
-        self.url = f"http://{self.host}/m5.rest/api/{self.data_dictionary}/{self.version}/{self.table}"
+    def __init__(self, m5_data: M5.loader):
+        self.m5_data = m5_data
 
     def load(self, source_language: Language) -> List[Sample]:
-        m5 = M5(self.host, self.data_dictionary, self.version, self.table)
-        return [
-            Sample(name, value, source_language)
-            for name, value in m5.loader(source_language)
-        ]
+        return [Sample(name, value, source_language) for name, value in self.m5_data]
