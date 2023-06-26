@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from .concept import OmopConcept
+from .concept import OmopConcept, Concept
 
 import pandas as pd
 
@@ -8,7 +8,15 @@ import pandas as pd
 @dataclass
 class Concepts:
     """
-    Concepts in a medical ontology like SNOMED-CT.
+    Collection of concepts
+    """
+
+    concepts: List[Concept]
+
+
+class OmopConcepts(Concepts):
+    """
+    Collection of concepts in a medical ontology like SNOMED-CT.
     """
 
     concepts: List[OmopConcept]
@@ -28,7 +36,7 @@ class Concepts:
         synonyms: pd.DataFrame,
         vocabulary_table: pd.DataFrame,
         vocabulary_id: str,
-    ) -> "Concepts":
+    ) -> "OmopConcepts":
         """
         Method for concatenation concepts and synonyms
         """
@@ -79,4 +87,4 @@ class Concepts:
                     voc_version_list[i],
                 )
             )
-        return Concepts(concepts_list)
+        return OmopConcepts(concepts_list)
