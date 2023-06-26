@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List
-from .concept import Concept
+from .concept import OmopConcept
 
 import pandas as pd
 
@@ -11,7 +11,7 @@ class Concepts:
     Concepts in a medical ontology like SNOMED-CT.
     """
 
-    concepts: List[Concept]
+    concepts: List[OmopConcept]
 
     def __getitem__(self, index):
         return self.concepts[index]
@@ -60,7 +60,7 @@ class Concepts:
         concepts_list = []
         for i, name in enumerate(main_concept_names):
             concepts_list.append(
-                Concept(
+                OmopConcept(
                     name,
                     main_concept_ids[i],
                     main_concept_codes[i],
@@ -71,7 +71,7 @@ class Concepts:
 
         for i, name in enumerate(synonyms_concept_names):
             concepts_list.append(
-                Concept(
+                OmopConcept(
                     name,
                     synonyms_concept_ids[i],
                     synonyms_concept_codes[i],

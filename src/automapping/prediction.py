@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .concept import Concept
+from .concept import OmopConcept
 
 
 @dataclass
@@ -8,5 +8,5 @@ class Prediction:
     A prediction with associated confidence score.
     """
 
-    concept: Concept
+    concept: OmopConcept
     score: float

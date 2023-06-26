@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 
 @dataclass
-class OmopConcept:
+class Concept:
     """
-    A concept in a medical ontology from OMOP CDM.
+    A concept in a medical ontology
     """
 
     name: str
@@ -13,10 +13,14 @@ class OmopConcept:
     domain_id: str
     voc_version: str
 
+    def get_name(self) -> str:
+        """Get name of the concept"""
+        return self.name
 
-class Concept(OmopConcept):
+
+class OmopConcept(Concept):
     """
-    A concept in a medical ontology
+    A concept in a medical ontology from OMOP CDM.
     """
 
     name: str
