@@ -13,10 +13,6 @@ class Concept:
     domain_id: str
     voc_version: str
 
-    def get_name(self) -> str:
-        """Get name of the concept"""
-        return self.name
-
 
 class OmopConcept(Concept):
     """
