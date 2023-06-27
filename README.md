@@ -1,8 +1,8 @@
 # de.uke.iam.automapping
 Automatic mapping of German medical-related terms into SNOMED-CT.
 
-Currently, this repository is under development for code quality improvement.
 -------
+Currently, this repository is under development for code quality improvement.
 
 ## About
 
