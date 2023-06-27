@@ -13,10 +13,23 @@ Currently, this repository is under development for code quality improvement.
 
 ## Getting Started
 1. Clone repository (we recommend use Visual Studio Clone)
-Screenshot 2023-06-27 at 13.07.11.png
+
+<div align="left">
+<p align="center">
+<a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
+<img align="center" width=40% src="./Screenshot 2023-06-27 at 13.07.11.png"></img>
+</a>
+</p>
+</div>
 
 2. Reopen Repository in Docker container
-Screenshot 2023-06-27 at 13.07.11.png
+<div align="left">
+<p align="center">
+<a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
+<img align="center" width=40% src="./Screenshot 2023-06-27 at 13.07.11.png"></img>
+</a>
+</p>
+</div>
 
 3. Download OMOP CDM files from [Athena] (https://athena.ohdsi.org/search-terms/start) with SNOMED CT vocabulary
 
