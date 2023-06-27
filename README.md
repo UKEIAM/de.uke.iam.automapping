@@ -17,7 +17,7 @@ Currently, this repository is under development for code quality improvement.
 <div align="left">
 <p align="center">
 <a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
-<img align="center" width=40% src="./Screenshot 2023-06-27 at 13.07.11.png"></img>
+<img align="left" width=50% src="./Screenshot 2023-06-27 at 13.07.11.png"></img>
 </a>
 </p>
 </div>
@@ -26,7 +26,7 @@ Currently, this repository is under development for code quality improvement.
 <div align="left">
 <p align="center">
 <a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
-<img align="center" width=40% src="./Screenshot 2023-06-27 at 13.07.11.png"></img>
+<img align="left" width=50% src="./Screenshot 2023-06-27 at 13.07.44.png"></img>
 </a>
 </p>
 </div>
