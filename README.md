@@ -12,8 +12,25 @@ Currently, this repository is under development for code quality improvement.
 
 
 ## Getting Started
-1. Download OMOP CDM files from [Athena] (https://athena.ohdsi.org/search-terms/start) with SNOMED CT vocabulary
-2.  
+1. Clone repository (we recommend use Visual Studio Clone)
+Screenshot 2023-06-27 at 13.07.11.png
+
+2. Reopen Repository in Docker container
+Screenshot 2023-06-27 at 13.07.11.png
+
+3. Download OMOP CDM files from [Athena] (https://athena.ohdsi.org/search-terms/start) with SNOMED CT vocabulary
+
+4. From Downloaded Archiv put files: CONCEPT.csv, CONCEPT_SYNONYM.csv, and VOCABULARY.csv in a folder with the repository
+
+5. Open example [pipeline](/workspaces/de.uke.iam.automapping/run_pipeline.ipynb) and replace variables with yours (path to files)
+
+| Variable Name              | Description                                                                | 
+| -------------------------- | ---------------------------------------------------------------------------| 
+| data_file                  | Path to Excel file with your data(should contain columns with id and name) | 
+| abbreviation_file          | Path to Excel file with german medical abbreviation and descriptions       |
+| concept_file               | Path to the file CONCEPT.csv from Athena                                   |
+| synonym_file               | Path to the file CONCEPT_SYNONYM.csv from Athena                           |
+| vocabulary_file            | Path to the file VOCABULARY.csv from Athena                                |
 
 ### Prerequesties
 This project utilize Docker for providing an OS-independent development and integration experience. We highly recommend using Visual Studio Code and the associated "Development Container" which allows direct access to a environment and shell with pre-installed Python, corresponding packages, and a specialized IDE experience. However, running Docker standalone is also possible by using the `Dockerfile` in the `devcontainer` folder. 
