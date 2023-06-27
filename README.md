@@ -1,14 +1,14 @@
 # de.uke.iam.automapping
 Automatic mapping of German medical-related terms into SNOMED-CT.
 
+Currently, this repository is under development for code quality improvement.
+-------
+
 ## About
 
 This repository contains the source code used in the development of our mapping approach between German medical phrases and The Observational Medical Outcomes Partnership (OMOP) concepts. 
 
 Compared to the current standard (USAGI) our approach performs slightly better. Its main advantage lies in the automatic processing of German phrases to English OMOP concept suggestions, operating without the need for human intervention.  
-
--------
-Currently, this repository is under development for code quality improvement.
 
 **Example of the result after translation and mapping (column names in USAGI format)**
 
