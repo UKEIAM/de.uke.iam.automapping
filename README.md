@@ -15,7 +15,7 @@ Currently, this repository is under development for code quality improvement.
 <div align="left">
 <p align="center">
 <a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
-<img align="center" width=50% src="./result.png"></img>
+<img align="center" width=80% src="./result.png"></img>
 </a>
 </p>
 </div>
@@ -32,7 +32,7 @@ This project utilize Docker for providing an OS-independent development and inte
 <div align="left">
 <p align="center">
 <a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
-<img align="center" width=50% src="./clone.png"></img>
+<img align="center" width=80% src="./clone.png"></img>
 </a>
 </p>
 </div>
@@ -41,7 +41,7 @@ This project utilize Docker for providing an OS-independent development and inte
 <div align="left">
 <p align="center">
 <a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
-<img align="center" width=50% src="./docker.png"></img>
+<img align="center" width=80% src="./docker.png"></img>
 </a>
 </p>
 </div>
