@@ -23,11 +23,11 @@ Compared to the current standard (USAGI) our approach performs slightly better. 
 
 ## Getting Started
 
-### Prerequesties
-This project utilize Docker for providing an OS-independent development and integration experience. We highly recommend using Visual Studio Code and the associated "Development Container" which allows direct access to a environment and shell with pre-installed Python, corresponding packages, and a specialized IDE experience. However, running Docker standalone is also possible by using the `Dockerfile` in the `devcontainer` folder. 
+### Prerequisites
+This project utilizes Docker for providing an OS-independent development and integration experience. We highly recommend using Visual Studio Code and the associated "Development Container" which allows direct access to an environment and shell with pre-installed Python, corresponding packages, and a specialized IDE experience. However, running Docker standalone is also possible by using the `Dockerfile` in the `devcontainer` folder. 
 
 ### Usage
-1. Clone repository (we recommend use Visual Studio Clone)
+1. Clone repository (we recommend using Visual Studio Clone)
 
 <div align="left">
 <p align="center">
@@ -37,7 +37,7 @@ This project utilize Docker for providing an OS-independent development and inte
 </p>
 </div>
 
-2. Reopen Repository in Docker container
+2. Reopen the Repository in the Docker container
 <div align="left">
 <p align="center">
 <a href="https://github.com/UKEIAM/de.uke.iam.automapping/">
@@ -65,9 +65,9 @@ This project utilize Docker for providing an OS-independent development and inte
 ## Directory Structure
 
 ```
-|- data_example/    (folder with data used in pipeline)
+|- data_example/    (folder with data used in the pipeline)
 |- notebooks/
-    |- pipeline.ipynb   (Jupyter Notebook with example how to run source code)
+    |- pipeline.ipynb   (Jupyter Notebook with example of how to run source code)
 |- src
     |- automapping/    (source code)
         |- concept.py       (object to keep concepts)
@@ -76,11 +76,11 @@ This project utilize Docker for providing an OS-independent development and inte
         |- m5_pipeline.py   (integration with internal application)
         |- loader.py        (file with data loading)
         |- prediction.py    (object with keep predictions)
-        |- preprocessor.py   (abbreviation replacement and nlp preprocessin)
+        |- preprocessor.py   (abbreviation replacement and nlp preprocessing)
         |- translator.py    (translation with Hugging Face model from German to English)
-        |- mapper.py        (objject with TF-idf model)
-    config.yaml (config for flask applciation)
-    flask_application_endpoint_swagger.py   (intergation of this pipeline with internal application)
+        |- mapper.py        (object with TF-idf model)
+    config.yaml (config for flask application)
+    flask_application_endpoint_swagger.py   (integration of this pipeline with internal application)
 ```
 
 ## License 
