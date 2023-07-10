@@ -66,8 +66,11 @@ This project utilizes Docker for providing an OS-independent development and int
 
 ```
 |- data_example/    (folder with data used in the pipeline)
+    |- example_data.xlsx    (example of data used to run the pipeline)
+    |- german_abbreviation.xlsx    (table with German medical abbreviations and their description)
+    |- mapping.csv    (a result from the pipeline)  
 |- notebooks/
-    |- pipeline.ipynb   (Jupyter Notebook with example of how to run source code)
+    |- pipeline.ipynb   (Jupyter Notebook with an example of how to run source code)
 |- src
     |- automapping/    (source code)
         |- concept.py       (object to keep concept)
