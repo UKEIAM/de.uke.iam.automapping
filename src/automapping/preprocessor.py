@@ -1,21 +1,27 @@
-from typing import Iterable, Mapping, Sequence
-import re
-import pandas as pd
 import spacy
+from typing import Sequence, Mapping
+from nltk.stem import PorterStemmer
+import pandas as pd
+import re
+
+from .sample import Sample
 
 
 class Preprocessor:
     """
-    A step in the pipeline preprocessing the raw input.
+    Preprocessing of the sample
     """
 
-    def __call__(self, data: Sequence[str]) -> Iterable[str]:
+    def transform(self, sample: Sample) -> Sample:
+        """
+        Preprocessing step
+        """
         raise NotImplementedError(
             "Abstract method required to be overwritten in subclass"
         )
 
 
-class Abbreviations(Preprocessor):
+class AbbreviationReplacement(Preprocessor):
     """
     A step in the pipeline removing abbreviations given a mapping.
     """
@@ -31,25 +37,27 @@ class Abbreviations(Preprocessor):
         Reading the mapping from Excel file with abbreviations.
         """
         abbreviations = pd.read_excel(path)
-        return Abbreviations(
+        return AbbreviationReplacement(
             abbreviations[[name_of_abbreviation_column, name_of_description_column]]
         )
 
-    def __call__(self, data: Sequence[str]) -> Iterable[str]:
-        for sample in data:
-            for _, original, replacement in self.mapping.itertuples():
-                sample = re.sub(r"\b" + original + r"[^\w]", replacement + " ", sample)
-            yield sample
+    def transform(self, sample: Sample) -> Sample:
+        for _, original, replacement in self.mapping.itertuples():
+            sample.content = re.sub(
+                r"\b" + original + r"[^\w]", replacement + " ", sample.content
+            )
+        return sample
 
 
-class EntityExtractor(Preprocessor):
+class SpacyPreprocessor(Preprocessor):
     """
-    A step in the pipeline removing uneccessary word.
+    Use Spacy for preprocessing of the sample with custumized spacy pipeline.
     """
 
-    def __init__(self):
-        # We preinstalled this in the Docker enviornment. If run as a package, it will be downloaded.
-        self.nlp = spacy.load("en_core_web_lg")
+    def __init__(self, pipeline: Sequence[str]):
+        self.pipeline = pipeline
+        self.nlp = spacy.load("en_core_web_sm")
+        self.stemmer = PorterStemmer()
         self.nlp.Defaults.stop_words.remove("no")
         self.nlp.Defaults.stop_words.remove("not")
         self.nlp.Defaults.stop_words.remove("none")
@@ -57,15 +65,25 @@ class EntityExtractor(Preprocessor):
         self.nlp.Defaults.stop_words.remove("back")
         self.nlp.Defaults.stop_words.add("doctor")
 
-    def __call__(self, data: Sequence[str]) -> Iterable[str]:
-        for sample in data:
-            sample = sample.lower()
-            token_list = []
-            doc = self.nlp(sample)
-            token_list = [
-                token.lemma_
-                for token in doc
-                if not token.is_stop and not token.is_punct
-            ]
-            text = " ".join(token_list)
-            yield text
+    def transform(self, sample: Sample) -> Sample:
+        doc = self.nlp(sample.content)
+        if "lowercase" in self.pipeline:
+            sample.content = " ".join([token.text.lower() for token in doc])
+            doc = self.nlp(sample.content)
+        if "stopwords" in self.pipeline:
+            sample.content = " ".join(
+                [token.text for token in doc if not token.is_stop]
+            )
+            doc = self.nlp(sample.content)
+        if "lemmatizer" in self.pipeline:
+            sample.content = " ".join([token.lemma_ for token in doc])
+            doc = self.nlp(sample.content)
+        if "punctuation" in self.pipeline:
+            sample.content = " ".join(
+                [token.text for token in doc if not token.is_punct]
+            )
+            doc = self.nlp(sample.content)
+        if "stemmer" in self.pipeline:
+            sample.content = " ".join([self.stemmer.stem(token.text) for token in doc])
+            doc = self.nlp(sample.content)
+        return sample

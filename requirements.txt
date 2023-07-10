@@ -15,3 +15,4 @@ sacremoses
 requests
 flask
 flask_restx
+nltk

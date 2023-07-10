@@ -1,19 +1,14 @@
-from abc import abstractmethod
 from transformers import pipeline
-from typing import Sequence
+from .sample import Sample
 from .language import Language
-from .preprocessor import Preprocessor
 
 
 class Translator:
     """
-    A step in the pipeline doing the actual translation.
+    Tranlation of the sample
     """
 
-    @abstractmethod
-    def translate(
-        self, data: Sequence[str], preprocessor: Sequence[Preprocessor]
-    ) -> Sequence[str]:
+    def translate(self, sample: Sample) -> Sample:
         """
         Translation step
         """
@@ -32,12 +27,8 @@ class HuggingFace(Translator):
         self.source_language = source_language
         self.model = f"Helsinki-NLP/opus-mt-{self.source_language.value}-{self.target_language.value}"
 
-    def translate(
-        self, data: Sequence[str], preprocessor: Sequence[Preprocessor]
-    ) -> Sequence[str]:
-        tr_list = []
+    def translate(self, sample: Sample) -> Sample:
         translator = pipeline("translation", self.model)
-        samples = list(preprocessor(data))
-        for sample in translator(samples):
-            tr_list.append(sample.get("translation_text"))
-        return tr_list
+        sample.content = translator(sample.content)[0].get("translation_text")
+        sample.language = self.target_language
+        return sample
